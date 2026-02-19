@@ -54,7 +54,7 @@ const callGemini = async (prompt, systemInstruction) => {
         if (!apiKey) throw new Error("No API Key");
 
         const response = await fetch(
-            `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`,
+            `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-pro:generateContent?key=${apiKey}`,
             {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -352,17 +352,47 @@ const CourseView = () => {
 
 const EmailGeneratorView = () => {
     const [topic, setTopic] = useState('');
+    const [customTopic, setCustomTopic] = useState('');
     const [details, setDetails] = useState('');
     const [generatedEmail, setGeneratedEmail] = useState('');
     const [loading, setLoading] = useState(false);
 
     const handleGenerate = async () => {
         if (!topic) return;
+        if (topic === 'otro' && !customTopic) return;
+
         setLoading(true);
-        const systemPrompt = `Eres el Redactor Jurídico de VECY... cuando generes el documento, RESALTA las partes claves juridicas (como nombres, valores, leyes) usando doble asterisco **Texto** para que se vean dorados.`;
-        const userPrompt = `Redactar documento sobre: ${topic}. Detalles: ${details}`;
-        const result = await callGemini(userPrompt, systemPrompt);
-        setGeneratedEmail(result);
+
+        // RECETA DE ABOGADO EXPERTO (SYSTEM PROMPT)
+        const systemPrompt = `
+            ACTÚA COMO: Un Abogado Experto en Derecho Inmobiliario y Civil Colombiano (VECY Legal AI).
+            TU OBJETIVO: Redactar documentos jurídicos impecables, blindados y profesionales.
+            
+            INSTRUCCIONES DE REDACCIÓN:
+            1. TONO: Formal, contundente, pero claro. Usa terminología jurídica precisa (ej: "Canon", "Arrendatario", "Cláusula Penal", "Mérito Ejecutivo").
+            2. FORMATO: Estructura clara con Títulos en Negrita. 
+            3. RESALTADO: Usa doble asterisco **Texto** para resaltar: Nombres, Fechas, Valores de Dinero, Leyes Citadas (ej: **Ley 820 de 2003**), y Plazos. Esto es VITAL para que el usuario ubique los datos claves.
+            4. FUNDAMENTO LEGAL: Siempre que sea pertinente, cita la normativa colombiana aplicable (Código Civil, Ley 675, Ley 820).
+            
+            ADVERTENCIA DE SEGURIDAD:
+            Si el usuario pide algo ilegal o no ético, rechaza la solicitud educadamente sugiriendo la vía legal.
+        `;
+
+        const finalTopic = topic === 'otro' ? customTopic : topic;
+        const userPrompt = `
+            SOLICITUD DEL CLIENTE: Redactar un documento tipo: "${finalTopic}".
+            DETALLES ESPECÍFICOS: ${details}
+            
+            Por favor, genera el documento completo listo para copiar y pegar.
+        `;
+
+        try {
+            const result = await callGemini(userPrompt, systemPrompt);
+            setGeneratedEmail(result);
+        } catch (error) {
+            console.error("Error generando documento:", error);
+            setGeneratedEmail("Hubo un error contactando al bufete virtual. Por favor intenta de nuevo.");
+        }
         setLoading(false);
     };
 
@@ -383,51 +413,73 @@ const EmailGeneratorView = () => {
                 </div>
 
                 <div className="grid md:grid-cols-2 gap-10 w-full max-w-7xl">
-                    <div className="bg-[#1c1c1c] p-10 rounded-sm border border-[#333] h-fit">
+                    <div className="bg-[#1c1c1c] p-10 rounded-sm border border-[#333] h-fit shadow-lg">
                         <div className="mb-8">
-                            <label className="block text-[#d4af37] text-xs font-bold uppercase tracking-widest mb-3">Trámite Legal</label>
+                            <label className="block text-[#d4af37] text-xs font-bold uppercase tracking-widest mb-3">Tipo de Trámite Legal</label>
                             <select
                                 value={topic}
                                 onChange={(e) => setTopic(e.target.value)}
-                                className="w-full bg-black border border-[#333] rounded-sm p-4 text-white focus:border-[#bf953f] outline-none text-sm"
+                                className="w-full bg-black border border-[#333] rounded-sm p-4 text-white focus:border-[#bf953f] outline-none text-sm mb-4 transition-colors"
                             >
-                                <option value="">Seleccione...</option>
-                                <option value="presentacion">Presentación Formal de Cliente</option>
-                                <option value="cobro">Reclamación de Honorarios</option>
+                                <option value="">Seleccione una opción...</option>
+                                <option value="Presentación Formal de Cliente">Presentación Formal de Cliente</option>
+                                <option value="Reclamación de Honorarios">Reclamación de Honorarios</option>
+                                <option value="Acuerdo de Puntas Compartidas">Acuerdo de Puntas (Colegas)</option>
+                                <option value="Terminación de Contrato de Mandato">Terminación de Contrato</option>
+                                <option value="otro">OTRO (Redacción Personalizada)</option>
                             </select>
+
+                            {/* Campo Condicional para OTRO */}
+                            {topic === 'otro' && (
+                                <input
+                                    type="text"
+                                    placeholder="Escribe el título del documento (ej: Derecho de Petición por Humedad)"
+                                    value={customTopic}
+                                    onChange={(e) => setCustomTopic(e.target.value)}
+                                    className="w-full bg-[#111] border border-[#bf953f] rounded-sm p-4 text-[#bf953f] placeholder-gray-600 outline-none text-sm animate-fade-in"
+                                />
+                            )}
                         </div>
+
                         <div className="mb-8">
-                            <label className="block text-[#d4af37] text-xs font-bold uppercase tracking-widest mb-3">Detalles</label>
+                            <label className="block text-[#d4af37] text-xs font-bold uppercase tracking-widest mb-3">Detalles del Caso</label>
                             <textarea
                                 value={details}
                                 onChange={(e) => setDetails(e.target.value)}
-                                className="w-full bg-black border border-[#333] rounded-sm p-4 text-white h-64 focus:border-[#bf953f] outline-none resize-none text-sm"
+                                placeholder="Nombres de las partes, fechas, valores, direcciones, y cualquier detalle clave..."
+                                className="w-full bg-black border border-[#333] rounded-sm p-4 text-white h-64 focus:border-[#bf953f] outline-none resize-none text-sm leading-relaxed"
                             />
                         </div>
                         <button
                             onClick={handleGenerate}
                             disabled={loading || !topic}
-                            className="w-full py-5 font-bold text-black uppercase tracking-widest rounded-sm bg-gradient-to-r from-[#bf953f] to-[#aa771c] hover:scale-[1.01] transition-transform"
+                            className="w-full py-5 font-bold text-black uppercase tracking-widest rounded-sm bg-gradient-to-r from-[#bf953f] to-[#aa771c] hover:scale-[1.01] transition-transform disabled:opacity-50 disabled:cursor-not-allowed shadow-[0_0_20px_rgba(191,149,63,0.3)] hover:shadow-[0_0_30px_rgba(191,149,63,0.5)]"
                         >
-                            {loading ? 'Redactando...' : 'Generar Documento'}
+                            {loading ? (
+                                <span className="flex items-center justify-center gap-2"><Loader className="w-5 h-5 animate-spin" /> Redactando...</span>
+                            ) : (
+                                'Generar Documento Legal'
+                            )}
                         </button>
                     </div>
 
                     <div className="bg-[#111] p-10 rounded-sm border border-[#333] relative min-h-[600px] flex flex-col shadow-2xl">
-                        <div className="absolute top-0 right-0 p-6">
-                            <button onClick={copyToClipboard} className="text-gray-400 hover:text-[#d4af37]"><Copy className="w-6 h-6" /></button>
+                        <div className="absolute top-0 right-0 p-6 z-10">
+                            <button onClick={copyToClipboard} className="text-gray-400 hover:text-[#d4af37] transition-colors" title="Copiar al portapapeles"><Copy className="w-6 h-6" /></button>
                         </div>
-                        <h3 className="text-white font-serif font-bold mb-6 border-b border-[#333] pb-4">Vista Previa</h3>
+                        <h3 className="text-white font-serif font-bold mb-6 border-b border-[#333] pb-4 flex items-center gap-2"><FileText className="w-5 h-5 text-[#bf953f]" /> Vista Previa</h3>
                         {generatedEmail ? (
                             <div className="flex-1 overflow-y-auto pr-4 custom-scrollbar">
-                                <div className="whitespace-pre-line text-gray-300 text-sm leading-7 font-light font-serif">
+                                <div className="whitespace-pre-line text-gray-300 text-sm leading-8 font-light font-serif">
                                     <FormatText text={generatedEmail} />
                                 </div>
                             </div>
                         ) : (
                             <div className="flex-1 flex flex-col items-center justify-center text-gray-600 opacity-40">
-                                <Scale className="w-20 h-20 mb-6" />
-                                <p className="text-center text-sm">Esperando instrucciones...</p>
+                                <Scale className="w-24 h-24 mb-6 stroke-1" />
+                                <p className="text-center text-sm font-light tracking-wide">
+                                    "La justicia es la constante y perpetua voluntad<br />de dar a cada uno su derecho."
+                                </p>
                             </div>
                         )}
                     </div>
@@ -632,6 +684,7 @@ const HomePage = () => {
 
 const AppV2 = () => {
     const [scrolled, setScrolled] = useState(false);
+    const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const location = useLocation();
 
     useEffect(() => {
@@ -679,21 +732,21 @@ const AppV2 = () => {
 
                         {/* MOBILE MENU BUTTON */}
                         <div className="md:hidden flex items-center">
-                            <button onClick={() => setScrolled(!scrolled)} className="text-gray-400 hover:text-white focus:outline-none">
-                                {scrolled ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+                            <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="text-gray-400 hover:text-white focus:outline-none">
+                                {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
                             </button>
                         </div>
                     </div>
                 </div>
 
                 {/* MOBILE MENU DROPDOWN */}
-                {scrolled && (
+                {mobileMenuOpen && (
                     <div className="md:hidden bg-[#0a0a0a] border-b border-[#333]">
                         <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-                            <Link to="/academia" className="text-gray-300 hover:text-white block px-3 py-2 rounded-md text-base font-medium" onClick={() => setScrolled(false)}>Academia VECY</Link>
-                            <a href="/#mito" className="text-gray-300 hover:text-white block px-3 py-2 rounded-md text-base font-medium" onClick={() => setScrolled(false)}>Riesgos WhatsApp</a>
-                            <a href="/#ley" className="text-gray-300 hover:text-white block px-3 py-2 rounded-md text-base font-medium" onClick={() => setScrolled(false)}>Marco Legal</a>
-                            <a href="/#herramientas" className="text-gray-300 hover:text-white block px-3 py-2 rounded-md text-base font-medium" onClick={() => setScrolled(false)}>Herramientas</a>
+                            <Link to="/academia" className="text-gray-300 hover:text-white block px-3 py-2 rounded-md text-base font-medium" onClick={() => setMobileMenuOpen(false)}>Academia VECY</Link>
+                            <a href="/#mito" className="text-gray-300 hover:text-white block px-3 py-2 rounded-md text-base font-medium" onClick={() => setMobileMenuOpen(false)}>Riesgos WhatsApp</a>
+                            <a href="/#ley" className="text-gray-300 hover:text-white block px-3 py-2 rounded-md text-base font-medium" onClick={() => setMobileMenuOpen(false)}>Marco Legal</a>
+                            <a href="/#herramientas" className="text-gray-300 hover:text-white block px-3 py-2 rounded-md text-base font-medium" onClick={() => setMobileMenuOpen(false)}>Herramientas</a>
                         </div>
                     </div>
                 )}
