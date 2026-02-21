@@ -22,9 +22,9 @@ export const callGemini = async (prompt, systemInstruction = "") => {
 
     // LISTA DE MODELOS A PROBAR
     const modelsToTry = [
-        "gemini-3.1-pro-preview",
-        "gemini-2.5-pro",
-        "gemini-2.5-flash"
+        "gemini-2.0-flash-exp",
+        "gemini-1.5-pro",
+        "gemini-1.5-flash"
     ];
 
     for (const model of modelsToTry) {

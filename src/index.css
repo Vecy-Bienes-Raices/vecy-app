@@ -19,4 +19,12 @@
     .btn-gold-premium:active {
         @apply scale-95;
     }
+
+    .btn-gold-muted {
+        @apply relative overflow-hidden font-bold uppercase tracking-[0.2em] text-xs px-10 py-4 rounded-sm transition-all duration-300 cursor-not-allowed;
+        background: linear-gradient(135deg, #1a1a1a 0%, #333 50%, #1a1a1a 100%);
+        color: #555;
+        border: 1px solid #333;
+        box-shadow: none;
+    }
 }

@@ -7,12 +7,12 @@ const http = require('http');
 const https = require('https');
 
 const PORT = 3800;
-const API_KEY = process.env.VITE_GOOGLE_API_KEY || 'AIzaSyCxCtYC1kzPjS1DcPWLcAZ_eTfXkGojLz0';
+const API_KEY = process.env.VITE_GOOGLE_API_KEY;
 
 const MODELS = [
-    'gemini-3.1-pro-preview',
-    'gemini-2.5-pro',
-    'gemini-2.5-flash'
+    'gemini-2.0-flash-exp',
+    'gemini-1.5-pro',
+    'gemini-1.5-flash'
 ];
 
 // Función para llamar a Gemini API con Search Grounding y Memoria
