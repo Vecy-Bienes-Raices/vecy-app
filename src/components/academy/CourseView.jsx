@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { BookOpen, GraduationCap, ChevronRight, Trophy, ClipboardCheck } from 'lucide-react';
+import { BookOpen, GraduationCap, ChevronRight, Trophy, ClipboardCheck, CheckCircle, ArrowLeft, ArrowRight } from 'lucide-react';
 import { PageTransition } from '../Layout/Shared';
 import { academyModules } from './ModuleRegistry';
 import ModuleDetailView from './ModuleDetailView';

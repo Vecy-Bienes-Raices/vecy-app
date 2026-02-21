@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Timer, ArrowRight, ArrowLeft, CheckCircle, XCircle, Trophy, RefreshCcw, ClipboardCheck } from 'lucide-react';
+import { Timer, ArrowRight, ArrowLeft, CheckCircle, XCircle, Trophy, RefreshCcw, ClipboardCheck, Award } from 'lucide-react';
 import { PageTransition } from '../Layout/Shared';
 import { quizData } from './ModuleRegistry';
 import CertificateView from './CertificateView';
