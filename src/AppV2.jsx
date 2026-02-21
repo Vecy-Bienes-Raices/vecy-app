@@ -58,7 +58,7 @@ const AppV2 = () => {
                                 <Link to="/academia" className="text-gray-400 hover:text-white transition-colors duration-300 text-xs font-semibold uppercase tracking-[0.15em] py-2 border-b-2 border-transparent hover:border-[#bf953f]">Academia VECY</Link>
                                 <a href="/#mito" className="text-gray-400 hover:text-white transition-colors duration-300 text-xs font-semibold uppercase tracking-[0.15em] py-2 border-b-2 border-transparent hover:border-[#bf953f]">Riesgos WhatsApp</a>
                                 <a href="/#ley" className="text-gray-400 hover:text-white transition-colors duration-300 text-xs font-semibold uppercase tracking-[0.15em] py-2 border-b-2 border-transparent hover:border-[#bf953f]">Marco Legal</a>
-                                <Link to="/generador" className="text-gray-400 hover:text-white transition-colors duration-300 text-xs font-semibold uppercase tracking-[0.15em] py-2 border-b-2 border-transparent hover:border-[#bf953f]">Herramientas</Link>
+                                <a href="/#herramientas" className="text-gray-400 hover:text-white transition-colors duration-300 text-xs font-semibold uppercase tracking-[0.15em] py-2 border-b-2 border-transparent hover:border-[#bf953f]">Herramientas</a>
                             </div>
                         </div>
 
@@ -76,7 +76,7 @@ const AppV2 = () => {
                             <Link to="/academia" className="text-white block px-4 py-3 rounded-sm border-l-2 border-[#bf953f] bg-white/5 font-serif text-lg tracking-wide" onClick={() => setMobileMenuOpen(false)}>Academia VECY</Link>
                             <a href="/#mito" className="text-gray-300 hover:text-white block px-4 py-3 text-base" onClick={() => setMobileMenuOpen(false)}>Riesgos WhatsApp</a>
                             <a href="/#ley" className="text-gray-300 hover:text-white block px-4 py-3 text-base" onClick={() => setMobileMenuOpen(false)}>Marco Legal</a>
-                            <Link to="/generador" className="text-gray-300 hover:text-white block px-4 py-3 text-base" onClick={() => setMobileMenuOpen(false)}>Herramientas</Link>
+                            <a href="/#herramientas" className="text-gray-300 hover:text-white block px-4 py-3 text-base" onClick={() => setMobileMenuOpen(false)}>Herramientas</a>
                         </div>
                     </div>
                 )}
