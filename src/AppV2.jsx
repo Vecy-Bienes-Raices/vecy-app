@@ -10,6 +10,7 @@ import CourseView from './components/academy/CourseView';
 import EmailGeneratorView from './components/generator/EmailGeneratorView';
 import SupportView from './pages/SupportView';
 import { LegalView, DataPolicyView } from './pages/StaticViews';
+import FloatingAiWidget from './components/Layout/FloatingAiWidget';
 
 const AppV2 = () => {
     const [scrolled, setScrolled] = useState(false);
@@ -92,6 +93,8 @@ const AppV2 = () => {
                     <Route path="/datos" element={<DataPolicyView />} />
                 </Routes>
             </AnimatePresence>
+
+            <FloatingAiWidget />
 
             <footer className="py-12 bg-black border-t border-[#222] text-center">
                 <div className="max-w-4xl mx-auto px-6">
