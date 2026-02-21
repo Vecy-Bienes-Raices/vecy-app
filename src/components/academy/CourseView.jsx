@@ -54,7 +54,7 @@ const CourseView = () => {
                         <GraduationCap className="w-10 h-10 text-[#d4af37]" />
                     </div>
                     <h1 className="text-4xl md:text-6xl font-serif font-bold text-white mb-6">Academia Jurídica VECY</h1>
-                    <p className="text-xl text-gray-400 max-w-2xl font-light font-serif text-center">
+                    <p className="text-lg md:text-xl text-gray-400 max-w-2xl font-light font-serif text-center px-4">
                         Formación de élite para Agentes Inmobiliarios. Domina el <strong className="font-bold text-white">Blindaje Probatorio Digital</strong> y asegura tus comisiones con la Ley 527.
                     </p>
                 </div>

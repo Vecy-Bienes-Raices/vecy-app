@@ -17,7 +17,7 @@ const CertificateView = ({ userData, score, onBack }) => {
         <PageTransition>
             <div className="max-w-5xl mx-auto px-6 py-12">
                 {/* THE CERTIFICATE */}
-                <div className="relative bg-white p-12 md:p-20 shadow-2xl rounded-sm overflow-hidden aspect-[1.414/1] flex flex-col items-center justify-between border-[20px] border-[#bf953f]/20 print:shadow-none print:border shadow-[0_0_60px_rgba(0,0,0,0.5)]">
+                <div className="relative bg-white p-6 sm:p-12 md:p-20 shadow-2xl rounded-sm overflow-hidden aspect-auto md:aspect-[1.414/1] min-h-[500px] md:min-h-0 flex flex-col items-center justify-between border-[10px] sm:border-[20px] border-[#bf953f]/20 print:shadow-none print:border shadow-[0_0_60px_rgba(0,0,0,0.5)]">
 
                     {/* Background Accents */}
                     <div className="absolute top-0 right-0 w-64 h-64 bg-[#bf953f]/5 rounded-bl-full pointer-events-none"></div>

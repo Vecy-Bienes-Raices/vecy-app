@@ -54,6 +54,7 @@ const HomePage = () => {
                     </div>
 
                     <div className="overflow-x-auto">
+                        {/* Desktop View Table */}
                         <div className="hidden md:block min-w-[800px] bg-[#111] rounded-sm border border-[#333] shadow-2xl">
                             <div className="grid grid-cols-3 divide-x divide-[#2d2d2d] bg-[#1c1c1c] border-b border-[#333] text-sm font-bold tracking-widest uppercase">
                                 <div className="text-gray-500 flex items-center gap-2 p-6"><Scale className="w-4 h-4" /> Variable Jurídica</div>
@@ -71,6 +72,36 @@ const HomePage = () => {
                                     <div className="font-bold text-gray-300 p-8 py-7 pr-4">{row.title}</div>
                                     <div className="text-gray-500 flex items-start gap-3 p-8 py-7 pr-4"><XCircle className="w-4 h-4 text-red-600 mt-0.5 flex-shrink-0" /> {row.chat}</div>
                                     <div className="text-white flex items-start gap-3 p-8 py-7"><Check className="w-5 h-5 text-[#10b981] mt-0.5 flex-shrink-0" /> {row.email}</div>
+                                </div>
+                            ))}
+                        </div>
+
+                        {/* Mobile View Cards */}
+                        <div className="md:hidden space-y-6">
+                            {[
+                                { title: "Integridad (Art. 9)", chat: "Modificable por ambas partes.", email: "Inalterable y definitivo." },
+                                { title: "Identidad (Art. 7)", chat: "Vinculado a SIM clonable.", email: "Credenciales únicas e IP." },
+                                { title: "Costo Probatorio", chat: "Alto. Requiere peritaje ($$$).", email: "Bajo. Presunción automática." },
+                                { title: "Disponibilidad", chat: "Baja. Riesgo de pérdida.", email: "Alta. Nube redundante." },
+                            ].map((row, idx) => (
+                                <div key={idx} className="bg-[#111] border border-[#333] rounded-sm p-6">
+                                    <h4 className="text-[#bf953f] font-serif font-bold text-lg mb-4 border-b border-[#222] pb-2">{row.title}</h4>
+                                    <div className="space-y-4">
+                                        <div className="flex items-start gap-3">
+                                            <XCircle className="w-5 h-5 text-red-600 shrink-0 mt-1" />
+                                            <div>
+                                                <span className="text-[10px] uppercase tracking-widest text-red-500/50 block font-bold">WhatsApp</span>
+                                                <p className="text-gray-400 text-sm">{row.chat}</p>
+                                            </div>
+                                        </div>
+                                        <div className="flex items-start gap-3">
+                                            <CheckCircle className="w-5 h-5 text-[#10b981] shrink-0 mt-1" />
+                                            <div>
+                                                <span className="text-[10px] uppercase tracking-widest text-[#10b981]/50 block font-bold">Email VECY</span>
+                                                <p className="text-white text-sm">{row.email}</p>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             ))}
                         </div>
