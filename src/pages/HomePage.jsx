@@ -36,7 +36,7 @@ const HomePage = () => {
                     <h1 className="text-3xl md:text-6xl font-serif font-bold mb-8 leading-tight text-white drop-shadow-lg">El Correo Electrónico: <br /><span className="bg-clip-text text-transparent" style={{ backgroundImage: theme.goldGradient }}>Tu Seguro de Vida Inmobiliario</span></h1>
                     <p className="text-lg md:text-xl text-gray-400 mb-12 max-w-3xl mx-auto font-light leading-relaxed border-l-2 border-[#333] pl-6 text-left md:text-center md:border-l-0 md:border-t-0">En el mundo jurídico, lo que no está escrito no existe. <br className="hidden md:block" />Descubre por qué <span className="text-white font-semibold">WhatsApp es un riesgo procesal</span> y el <span className="text-white font-semibold">Correo es tu salvaguarda patrimonial</span>.</p>
                     <div className="flex flex-col md:flex-row gap-6 justify-center items-center">
-                        <Link to="/academia" className="relative px-8 py-4 text-sm font-bold text-black uppercase tracking-widest rounded-sm transition-all duration-300 hover:scale-105 shadow-[0_0_25px_rgba(191,149,63,0.4)]" style={{ backgroundImage: theme.goldGradient }}>Iniciar Curso</Link>
+                        <Link to="/academia" className="btn-gold-premium">Iniciar Curso</Link>
                         <a href="#estrategia" className="text-[#d4af37] hover:text-white flex items-center gap-2 text-sm font-semibold tracking-widest transition-colors uppercase border-b border-[#333] pb-1 hover:border-white">Ver Estrategia VECY <ChevronDown className="w-4 h-4" /></a>
                     </div>
                 </div>
@@ -152,7 +152,7 @@ const HomePage = () => {
                         <div className="bg-[#1c1c1c] p-8 rounded-sm border border-[#d4af37] flex flex-col items-center hover:scale-[1.02] transition-transform shadow-[0_0_20px_rgba(191,149,63,0.1)] cursor-pointer group">
                             <Link to="/generador" className="w-full flex flex-col items-center">
                                 <div className="relative"><div className="absolute -inset-1 bg-gradient-to-r from-[#bf953f] to-[#aa771c] rounded-full blur opacity-50 group-hover:opacity-100 transition duration-500"></div><div className="relative bg-black rounded-full p-3"><Gavel className="w-10 h-10 text-[#d4af37]" /></div></div>
-                                <h3 className="text-xl font-bold text-white mt-6 mb-2">Redactor Jurídico IA</h3><p className="text-sm text-gray-400 mb-6 max-w-sm text-center">Genera reclamaciones, acuerdos de puntas y contratos vía email.</p><button className="px-6 py-2 rounded-sm text-black font-bold text-xs uppercase tracking-widest bg-gradient-to-r from-[#bf953f] to-[#aa771c] hover:shadow-lg">Usar Ahora ✨</button>
+                                <h3 className="text-xl font-bold text-white mt-6 mb-2">Redactor Jurídico IA</h3><p className="text-sm text-gray-400 mb-6 max-w-sm text-center">Genera reclamaciones, acuerdos de puntas y contratos vía email.</p><button className="btn-gold-premium !px-6 !py-2">Usar Ahora ✨</button>
                             </Link>
                         </div>
                         <div className="bg-[#1c1c1c] p-8 rounded-sm border border-[#333] flex flex-col items-center hover:border-gray-500 transition-colors">

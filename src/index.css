@@ -1,1 +1,22 @@
 @import "tailwindcss";
+
+@layer components {
+    .btn-gold-premium {
+        @apply relative overflow-hidden font-bold uppercase tracking-[0.2em] text-xs px-10 py-4 rounded-sm transition-all duration-300;
+        background: linear-gradient(135deg, #bf953f 0%, #fcf6ba 25%, #b38728 50%, #fcf6ba 75%, #bf953f 100%);
+        background-size: 200% auto;
+        color: black;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3), 0 0 20px rgba(191, 149, 63, 0.2);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .btn-gold-premium:hover {
+        @apply scale-105;
+        background-position: right center;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 30px rgba(191, 149, 63, 0.6);
+    }
+
+    .btn-gold-premium:active {
+        @apply scale-95;
+    }
+}

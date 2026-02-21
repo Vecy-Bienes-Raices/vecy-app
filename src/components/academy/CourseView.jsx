@@ -135,7 +135,7 @@ const CourseView = () => {
                                     </button>
                                     <button
                                         onClick={() => setShowQuiz(true)}
-                                        className="px-8 py-4 bg-gradient-to-r from-[#bf953f] to-[#aa771c] text-black font-bold uppercase tracking-[0.2em] text-xs rounded-sm shadow-[0_0_20px_rgba(191,149,63,0.3)] hover:scale-105 transition-transform"
+                                        className="btn-gold-premium"
                                     >
                                         Iniciar Examen Ahora
                                     </button>

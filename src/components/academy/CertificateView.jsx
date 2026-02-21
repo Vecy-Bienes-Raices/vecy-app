@@ -93,7 +93,7 @@ const CertificateView = ({ userData, score, onBack }) => {
                     </button>
                     <button
                         onClick={handlePrint}
-                        className="w-full sm:w-auto flex items-center justify-center gap-3 px-12 py-5 bg-gradient-to-r from-[#bf953f] to-[#aa771c] text-black hover:scale-105 active:scale-95 transition-all rounded-sm font-black uppercase tracking-[0.2em] text-sm shadow-[0_0_30px_rgba(191,149,63,0.3)]"
+                        className="btn-gold-premium w-full sm:w-auto flex items-center justify-center gap-3 !px-12 !py-5 !text-sm !font-black"
                     >
                         <Printer className="w-5 h-5" /> Imprimir / PDF
                     </button>

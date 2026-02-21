@@ -311,7 +311,7 @@ const EdduAIChat = () => {
                         <button
                             onClick={handleSend}
                             disabled={isTyping || (!input.trim() && attachedFiles.length === 0)}
-                            className={`p-2 h-[40px] w-[50px] flex items-center justify-center bg-gradient-to-r from-[#d4af37] to-[#F5A500] rounded-sm text-black transition-all duration-200 shadow-[0_0_15px_rgba(191,149,63,0.3)] hover:shadow-[0_0_30px_rgba(212,175,55,0.75)] hover:scale-110 hover:from-[#d4af37] hover:to-[#aa771c] active:scale-95 ${(isTyping || !input.trim()) ? 'opacity-50 cursor-not-allowed' : ''}`}
+                            className={`btn-gold-premium !p-2 !h-[40px] !w-[50px] flex items-center justify-center active:scale-95 ${(isTyping || !input.trim()) ? 'opacity-50 cursor-not-allowed' : ''}`}
                         >
                             <Send className="w-5 h-5" />
                         </button>

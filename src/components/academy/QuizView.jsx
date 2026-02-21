@@ -133,9 +133,9 @@ const QuizView = ({ onBack }) => {
                         <button
                             onClick={handleStart}
                             disabled={cooldownRemaining > 0}
-                            className={`px-10 py-4 font-bold uppercase tracking-widest text-xs shadow-lg transition-all ${cooldownRemaining > 0
-                                ? 'bg-gray-700 text-gray-400 cursor-not-allowed opacity-50'
-                                : 'bg-gradient-to-r from-[#bf953f] to-[#aa771c] text-black hover:scale-105'}`}
+                            className={cooldownRemaining > 0
+                                ? 'px-10 py-4 bg-gray-700 text-gray-400 cursor-not-allowed opacity-50 rounded-sm'
+                                : 'btn-gold-premium'}
                         >
                             {cooldownRemaining > 0 ? 'Bloqueo Activo' : 'Iniciar Examen'}
                         </button>
@@ -239,10 +239,10 @@ const QuizView = ({ onBack }) => {
                             <button
                                 onClick={() => setShowCertificate(true)}
                                 disabled={!userData?.name?.trim()}
-                                className={`w-full py-6 font-bold uppercase tracking-[0.3em] text-sm shadow-xl transition-all rounded-sm ${userData?.name?.trim()
-                                    ? 'bg-gradient-to-r from-[#bf953f] to-[#aa771c] text-black hover:scale-[1.01]'
-                                    : 'bg-[#222] text-gray-600 cursor-not-allowed'
-                                    }`}
+                                className={userData?.name?.trim()
+                                    ? 'btn-gold-premium w-full !text-sm !tracking-[0.3em]'
+                                    : 'w-full py-6 font-bold uppercase tracking-[0.3em] text-sm bg-[#222] text-gray-600 cursor-not-allowed rounded-sm'
+                                }
                             >
                                 Descargar mi Diploma Oficial
                             </button>

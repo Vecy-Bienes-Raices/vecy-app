@@ -94,7 +94,7 @@ const ModuleDetailView = ({ module, onBack, onNext, onPrevious }) => {
                     ) : (
                         <button
                             onClick={onBack}
-                            className="px-10 py-5 bg-gradient-to-r from-[#bf953f] to-[#aa771c] text-black font-bold uppercase tracking-[0.2em] text-xs h-fit hover:scale-105 transition-transform shadow-[0_0_20px_rgba(191,149,63,0.3)]"
+                            className="btn-gold-premium"
                         >
                             Finalizar y Volver al Panel
                         </button>
