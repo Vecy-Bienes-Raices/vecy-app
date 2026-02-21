@@ -23,9 +23,13 @@ const FloatingAiWidget = () => {
                 <div className="absolute -inset-2 bg-[#bf953f]/20 rounded-full animate-ping pointer-events-none"></div>
 
                 {/* Main Widget Button */}
-                <div className="relative bg-black border-2 border-[#bf953f]/50 p-4 md:p-5 rounded-full shadow-[0_0_30px_rgba(191,149,63,0.3)] hover:border-[#bf953f] transition-all transform hover:scale-110 active:scale-95">
-                    <div className="relative">
-                        <MessageSquare className="w-6 h-6 md:w-8 md:h-8 text-[#bf953f]" />
+                <div className="relative bg-black border-2 border-[#bf953f]/50 p-1 md:p-1.5 rounded-full shadow-[0_0_30px_rgba(191,149,63,0.3)] hover:border-[#bf953f] transition-all transform hover:scale-110 active:scale-95 overflow-hidden">
+                    <div className="relative w-12 h-12 md:w-16 md:h-16 rounded-full overflow-hidden">
+                        <img
+                            src="/Eddu-AI.png"
+                            alt="Eddu-AI"
+                            className="w-full h-full object-cover"
+                        />
                         <motion.div
                             animate={{
                                 scale: [1, 1.5, 1],
