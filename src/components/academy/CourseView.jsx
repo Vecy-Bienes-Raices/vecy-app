@@ -54,8 +54,8 @@ const CourseView = () => {
                         <GraduationCap className="w-10 h-10 text-[#d4af37]" />
                     </div>
                     <h1 className="text-4xl md:text-6xl font-serif font-bold text-white mb-6">Academia Jurídica VECY</h1>
-                    <p className="text-xl text-gray-400 max-w-2xl font-light font-serif">
-                        Formación de élite para Agentes Inmobiliarios. Domina el **Blindaje Probatorio Digital** y asegura tus comisiones con la Ley 527.
+                    <p className="text-xl text-gray-400 max-w-2xl font-light font-serif text-center">
+                        Formación de élite para Agentes Inmobiliarios. Domina el <strong className="font-bold text-white">Blindaje Probatorio Digital</strong> y asegura tus comisiones con la Ley 527.
                     </p>
                 </div>
 
@@ -111,7 +111,7 @@ const CourseView = () => {
                                     </div>
                                     <h2 className="text-3xl font-serif font-bold text-white mb-6">¿Preparado para tu Certificación VECY?</h2>
                                     <p className="text-gray-400 font-light leading-relaxed mb-0">
-                                        Has completado todos los módulos. Ahora puedes evaluar tus conocimientos. Si obtienes más del 80%, recibirás tu **Diploma de Experto en Blindaje Jurídico Digital**.
+                                        Has completado todos los módulos. Ahora puedes evaluar tus conocimientos. Si obtienes más del 80%, recibirás tu <strong className="font-bold text-white">Diploma de Experto en Blindaje Jurídico Digital</strong>.
                                     </p>
                                 </div>
                                 <div className="flex flex-col sm:flex-row justify-center md:justify-end gap-4">

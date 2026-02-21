@@ -55,7 +55,7 @@ const CertificateView = ({ userData, score, onBack }) => {
                                 <strong className="text-xl md:text-2xl uppercase tracking-wide text-black block mt-2">
                                     Especialista en Blindaje de Comisiones con Envío Certificado y Herramientas Digitales
                                 </strong>
-                                <span className="text-gray-600 font-light italic mt-4 block">con una calificación de excelencia del **{score}%**</span>
+                                <span className="text-gray-600 font-light italic mt-4 block">con una calificación de excelencia del <strong className="font-bold text-black">{score}%</strong></span>
                             </p>
                         </div>
                     </div>

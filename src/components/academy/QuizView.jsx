@@ -72,7 +72,7 @@ const QuizView = ({ onBack }) => {
                     <Trophy className="w-20 h-20 text-[#bf953f] mx-auto mb-8 animate-bounce" />
                     <h1 className="text-4xl font-serif font-bold text-white mb-6">Examen de Certificación de Élite</h1>
                     <p className="text-gray-400 text-lg mb-12 max-w-2xl mx-auto">
-                        Estás a punto de iniciar la evaluación final. Tienes **10 minutos** para responder 10 preguntas críticas. Necesitas al menos un **80%** para obtener tu diploma.
+                        Estás a punto de iniciar la evaluación final. Tienes <strong className="font-bold text-white">10 minutos</strong> para responder 10 preguntas críticas. Necesitas al menos un <strong className="font-bold text-white">80%</strong> para obtener tu diploma.
                     </p>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12 text-left max-w-md mx-auto">
                         <div className="flex items-center gap-3 text-sm text-gray-300">
