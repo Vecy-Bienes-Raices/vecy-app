@@ -142,7 +142,7 @@ const EdduAIChat = () => {
     };
 
     return (
-        <div className="flex flex-col h-[650px] w-full max-w-5xl mx-auto bg-[#111] rounded-lg border border-[#333] overflow-hidden shadow-2xl relative animate-fade-in">
+        <div className="flex flex-col h-[85vh] md:h-[650px] w-full max-w-5xl mx-auto bg-[#0e0e0e] rounded-xl border border-[#d4af37]/50 overflow-hidden shadow-[0_0_50px_rgba(255,215,0,0.25)] relative animate-fade-in">
             {/* HEADER DEL CHAT */}
             <div className="bg-[#1c1c1c] p-4 border-b border-[#333] flex items-center justify-between">
                 <div className="flex items-center gap-4">
@@ -167,8 +167,8 @@ const EdduAIChat = () => {
                 {messages.map((msg) => (
                     <div key={msg.id} className={`flex ${msg.type === 'user' ? 'justify-end' : 'justify-start'}`}>
                         <div className={`max-w-[85%] rounded-2xl p-5 ${msg.type === 'user'
-                                ? 'bg-[#1c1c1c] border border-[#333] text-gray-200 rounded-tr-none shadow-lg'
-                                : 'bg-gradient-to-br from-[#111] to-[#000] border border-[#bf953f]/30 text-gray-100 rounded-tl-none shadow-lg'
+                            ? 'bg-[#1c1c1c] border border-[#333] text-gray-200 rounded-tr-none shadow-lg'
+                            : 'bg-gradient-to-br from-[#111] to-[#000] border border-[#bf953f]/30 text-gray-100 rounded-tl-none shadow-lg'
                             }`}>
                             <p className="text-sm leading-relaxed whitespace-pre-line font-light">
                                 <FormatText text={msg.text} />
@@ -231,7 +231,7 @@ const CourseView = ({ onBack }) => {
                     </div>
 
                     <div className="grid gap-6">
-                        <h4 className="text-[#bf953f] font-bold uppercase tracking-widest text-sm border-b border-gray-800 pb-2">Conceptos Críticos</h4>
+                        <h4 className="text-white font-bold uppercase tracking-widest text-sm border-b border-gray-800 pb-2">Conceptos Críticos</h4>
                         <div className="bg-[#1a1a1a] p-6 rounded-sm border border-[#333]">
                             <strong className="text-white block mb-2">1. Integridad del Mensaje (Art. 9)</strong>
                             <p className="text-sm text-gray-400 leading-relaxed">Se considera que la información está completa y inalterada desde su generación definitiva. Un correo en servidor (IMAP/Exchange) es técnicamente inalterable por el usuario promedio, a diferencia de un chat de WhatsApp local.</p>
@@ -252,7 +252,7 @@ const CourseView = ({ onBack }) => {
             detail: (
                 <div className="space-y-8 animate-fade-in">
                     <div className="bg-[#0a0a0a] p-6 border border-[#bf953f] rounded-sm shadow-[0_0_20px_rgba(191,149,63,0.1)]">
-                        <h3 className="text-xl font-bold text-[#bf953f] mb-4">La Cadena de Custodia Digital</h3>
+                        <h3 className="text-xl font-bold text-white mb-4">La Cadena de Custodia Digital</h3>
                         <p className="text-gray-300 mb-4">Para que un correo sea "Prueba Reina", debe certificar 3 momentos:</p>
                         <ul className="space-y-3 text-sm">
                             <li className="flex items-center gap-3"><CheckCircle className="text-green-500 w-4 h-4" /> <span className="text-white">Envío Exitoso:</span> Salida del servidor SMTP.</li>
@@ -309,7 +309,7 @@ const CourseView = ({ onBack }) => {
                                 <div className="flex items-start gap-4">
                                     <mod.icon className={`w-6 h-6 mt-1 flex-shrink-0 ${activeModule?.id === mod.id ? 'text-[#bf953f]' : 'text-gray-500'}`} />
                                     <div>
-                                        <h3 className={`font-bold text-lg mb-2 ${activeModule?.id === mod.id ? 'text-white' : 'text-gray-300'}`}>{mod.title}</h3>
+                                        <h3 className={`font-bold text-lg mb-2 ${activeModule?.id === mod.id ? 'text-[#bf953f]' : 'text-gray-300'}`}>{mod.title}</h3>
                                         <p className="text-xs text-gray-500 leading-relaxed">{mod.content}</p>
                                     </div>
                                 </div>
@@ -318,7 +318,7 @@ const CourseView = ({ onBack }) => {
                     </div>
 
                     {/* Content Detail */}
-                    <div className="lg:col-span-8 bg-[#111] border border-[#333] p-10 rounded-sm min-h-[500px] shadow-2xl relative">
+                    <div className="lg:col-span-8 bg-[#111] border border-[#333] p-10 rounded-sm min-h-[500px] shadow-2xl">
                         {activeModule ? (
                             <>
                                 <div className="absolute top-0 right-0 p-4 opacity-10"><activeModule.icon className="w-32 h-32 text-white" /></div>
@@ -458,6 +458,7 @@ const SupportView = ({ onBack }) => (
 const App = () => {
     const [scrolled, setScrolled] = useState(false);
     const [currentView, setCurrentView] = useState('home');
+    const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
     useEffect(() => {
         const handleScroll = () => setScrolled(window.scrollY > 50);
@@ -468,6 +469,7 @@ const App = () => {
     const changeView = (viewName) => {
         if (typeof window !== 'undefined') window.scrollTo({ top: 0, behavior: 'smooth' });
         setCurrentView(viewName);
+        setMobileMenuOpen(false); // Close mobile menu on view change
     };
 
     const scrollToSection = (id) => {
@@ -477,6 +479,7 @@ const App = () => {
         } else {
             document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
         }
+        setMobileMenuOpen(false); // Close mobile menu on section scroll
     };
 
     const theme = {
@@ -531,8 +534,33 @@ const App = () => {
                                 ))}
                             </div>
                         </div>
+                        <div className="-mr-2 flex md:hidden">
+                            <button
+                                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                                className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
+                            >
+                                <span className="sr-only">Open main menu</span>
+                                {mobileMenuOpen ? (
+                                    <X className="block h-6 w-6" aria-hidden="true" />
+                                ) : (
+                                    <Menu className="block h-6 w-6" aria-hidden="true" />
+                                )}
+                            </button>
+                        </div>
                     </div>
                 </div>
+
+                {mobileMenuOpen && (
+                    <div className="md:hidden absolute top-24 left-0 w-full bg-[#0a0a0a]/95 backdrop-blur-xl border-b border-[#bf953f]/30 animate-fade-in z-40">
+                        <div className="px-6 py-8 space-y-4">
+                            <button onClick={() => changeView('home')} className="text-white block w-full text-left px-4 py-3 rounded-sm border-l-2 border-[#bf953f] bg-white/5 font-serif text-lg tracking-wide">Inicio</button>
+                            <button onClick={() => changeView('academy')} className="text-gray-300 hover:text-white block w-full text-left px-4 py-3 text-base">Academia VECY</button>
+                            <button onClick={() => scrollToSection('mito')} className="text-gray-300 hover:text-white block w-full text-left px-4 py-3 text-base">Riesgos WhatsApp</button>
+                            <button onClick={() => scrollToSection('ley')} className="text-gray-300 hover:text-white block w-full text-left px-4 py-3 text-base">Marco Legal</button>
+                            <button onClick={() => scrollToSection('herramientas')} className="text-gray-300 hover:text-white block w-full text-left px-4 py-3 text-base">Herramientas</button>
+                        </div>
+                    </div>
+                )}
             </nav>
 
             {currentView === 'home' && (
@@ -545,7 +573,7 @@ const App = () => {
                                 <Award className="w-4 h-4 text-[#bf953f]" />
                                 <span className="text-gray-300 text-xs font-bold tracking-[0.2em] uppercase">Máster en Derecho Inmobiliario Digital</span>
                             </div>
-                            <h1 className="text-4xl md:text-6xl font-serif font-bold mb-8 leading-tight text-white drop-shadow-lg">El Correo Electrónico: <br /><span className="bg-clip-text text-transparent" style={{ backgroundImage: theme.goldGradient }}>Tu Seguro de Vida Inmobiliario</span></h1>
+                            <h1 className="text-3xl md:text-6xl font-serif font-bold mb-8 leading-tight text-white drop-shadow-lg">El Correo Electrónico: <br /><span className="bg-clip-text text-transparent" style={{ backgroundImage: theme.goldGradient }}>Tu Seguro de Vida Inmobiliario</span></h1>
                             <p className="text-lg md:text-xl text-gray-400 mb-12 max-w-3xl mx-auto font-light leading-relaxed border-l-2 border-[#333] pl-6 text-left md:text-center md:border-l-0 md:border-t-0">En el mundo jurídico, lo que no está escrito no existe. <br className="hidden md:block" />Descubre por qué <span className="text-white font-semibold">WhatsApp es un riesgo procesal</span> y el <span className="text-white font-semibold">Correo es tu salvaguarda patrimonial</span>.</p>
                             <div className="flex flex-col md:flex-row gap-6 justify-center items-center">
                                 <button onClick={() => changeView('academy')} className="relative px-8 py-4 text-sm font-bold text-black uppercase tracking-widest rounded-sm transition-all duration-300 hover:scale-105 shadow-[0_0_25px_rgba(191,149,63,0.4)]" style={{ backgroundImage: theme.goldGradient }}>Iniciar Curso</button>
@@ -555,20 +583,23 @@ const App = () => {
                     </section>
 
                     {/* TABLE COMPARISON SECTION (ROBUSTA) */}
-                    <section id="mito" className="py-24 relative bg-[#050505]">
+                    <section id="mito" className="py-12 md:py-24 relative bg-[#050505]">
                         <div className="max-w-7xl mx-auto px-6">
                             <div className="text-center mb-16">
-                                <h2 className="text-3xl font-serif font-bold mb-4 text-[#d4af37]">Análisis Forense Digital: WhatsApp vs Email</h2>
+                                <h2 className="text-3xl font-serif font-bold mb-4">
+                                    <span className="text-[#d4af37]">Análisis Forense Digital:</span>{' '}
+                                    <span className="text-white">WhatsApp vs Email</span>
+                                </h2>
                                 <p className="text-gray-500 max-w-3xl mx-auto font-light">Comparativa técnica basada en los criterios de admisibilidad judicial de la Ley 527.</p>
                             </div>
 
                             <div className="overflow-x-auto">
                                 <div className="min-w-[800px] bg-[#111] rounded-sm border border-[#333] shadow-2xl">
                                     {/* HEADER TABLA */}
-                                    <div className="grid grid-cols-3 bg-[#1c1c1c] border-b border-[#333] p-6 text-sm font-bold tracking-widest uppercase">
-                                        <div className="text-gray-500 flex items-center gap-2"><Scale className="w-4 h-4" /> Variable Jurídica</div>
-                                        <div className="text-red-500 flex items-center gap-2"><AlertTriangle className="w-4 h-4" /> WhatsApp / Chats</div>
-                                        <div className="text-[#bf953f] flex items-center gap-2"><Shield className="w-4 h-4" /> Correo Certificado</div>
+                                    <div className="grid grid-cols-3 divide-x divide-[#2d2d2d] bg-[#1c1c1c] border-b border-[#333] text-sm font-bold tracking-widest uppercase">
+                                        <div className="text-gray-500 flex items-center gap-2 p-6"><Scale className="w-4 h-4" /> Variable Jurídica</div>
+                                        <div className="text-red-500 flex items-center gap-2 p-6"><AlertTriangle className="w-4 h-4" /> WhatsApp / Chats</div>
+                                        <div className="text-[#bf953f] flex items-center gap-2 p-6"><Shield className="w-4 h-4" /> Correo Certificado</div>
                                     </div>
 
                                     {/* ROWS */}
@@ -579,10 +610,10 @@ const App = () => {
                                         { title: "Disponibilidad (Art. 12)", chat: "Baja. Si pierdes el celular o no tienes backup, pierdes la prueba.", email: "Alta. Almacenamiento en nube redundante e independiente del dispositivo.", good: true },
                                         { title: "Conducta Concluyente", chat: "Ambigua. Un 'Emoji' o silencio puede malinterpretarse.", email: "Clara. La trazabilidad de apertura y respuesta es inequívoca.", good: true },
                                     ].map((row, idx) => (
-                                        <div key={idx} className={`grid grid-cols-3 border-b border-[#222] p-6 text-sm hover:bg-[#161616] transition-colors`}>
-                                            <div className="font-bold text-gray-300">{row.title}</div>
-                                            <div className="text-gray-500 flex items-start gap-2"><XCircle className="w-4 h-4 text-red-900 mt-0.5 flex-shrink-0" /> {row.chat}</div>
-                                            <div className="text-white flex items-start gap-2"><Check className="w-4 h-4 text-[#bf953f] mt-0.5 flex-shrink-0" /> {row.email}</div>
+                                        <div key={idx} className={`grid grid-cols-3 divide-x divide-[#2d2d2d] border-b-2 border-[#222] text-sm hover:bg-[#161616] transition-colors`}>
+                                            <div className="font-bold text-gray-300 p-8 py-7 pr-4">{row.title}</div>
+                                            <div className="text-gray-500 flex items-start gap-3 p-8 py-7 pr-4"><XCircle className="w-4 h-4 text-red-600 mt-0.5 flex-shrink-0" /> {row.chat}</div>
+                                            <div className="text-white flex items-start gap-3 p-8 py-7"><Check className="w-5 h-5 text-[#10b981] mt-0.5 flex-shrink-0" /> {row.email}</div>
                                         </div>
                                     ))}
                                 </div>
@@ -591,7 +622,7 @@ const App = () => {
                     </section>
 
                     {/* ... (SECCIONES ORIGINALES LEY, ESTRATEGIA, HERRAMIENTAS - SIN CAMBIOS) ... */}
-                    <section id="ley" className="py-24 relative bg-[#0a0a0a]">
+                    <section id="ley" className="py-12 md:py-24 relative bg-[#0a0a0a]">
                         {/* (CONTENIDO ORIGINAL RESTAURADO PREVIAMENTE) */}
                         <div className="relative z-10 max-w-5xl mx-auto px-6">
                             <div className="border-l-4 border-[#bf953f] pl-8 py-2 mb-12"><h2 className="text-4xl font-serif text-white font-bold text-left">Fundamento Legal: Ley 527 de 1999</h2><p className="text-[#d4af37] text-lg font-light mt-2 text-left">El pilar del Comercio Electrónico en Colombia</p></div>
@@ -611,12 +642,12 @@ const App = () => {
                         </div>
                     </section>
 
-                    <section id="estrategia" className="py-24 bg-[#050505] relative">
+                    <section id="estrategia" className="py-12 md:py-24 bg-[#050505] relative">
                         <div className="max-w-7xl mx-auto px-6">
                             <div className="flex flex-col md:flex-row justify-between items-end mb-16 border-b border-[#333] pb-8"><div><h2 className="text-3xl md:text-4xl font-serif text-white font-bold mb-2 text-left">Protocolo de Blindaje VECY</h2><p className="text-[#d4af37] text-left">Metodología exclusiva VECY BIENES RAÍCES</p></div><div className="mt-4 md:mt-0"><span className="px-4 py-2 border border-[#10b981] bg-[#10b981]/10 text-[#10b981] text-xs font-bold uppercase tracking-widest rounded-sm">Sistema Aprobado</span></div></div>
                             <div className="grid md:grid-cols-3 gap-8">
                                 {[{ step: "01", title: "Omnicanalidad Formal", desc: "WhatsApp para logística, Correo para el negocio.", icon: <Smartphone className="w-6 h-6 text-[#d4af37]" /> }, { step: "02", title: "Cláusula Digital", desc: "Nota legal que valida el acuerdo sin firma física.", icon: <FileText className="w-6 h-6 text-[#d4af37]" /> }, { step: "03", title: "Evidencia Certificada", desc: "Uso de 4-72 para notificaciones críticas.", icon: <CheckCircle className="w-6 h-6 text-[#d4af37]" /> }].map((item, idx) => (
-                                    <div key={idx} className="bg-[#1c1c1c] p-8 border-t-2 border-[#bf953f] hover:bg-[#262626] transition-colors shadow-lg group">
+                                    <div key={idx} className="bg-[#1c1c1c] p-8 rounded-sm border-t-2 border-[#bf953f] hover:bg-[#262626] transition-colors shadow-lg group">
                                         <div className="flex justify-between items-start mb-6"><span className="text-4xl font-serif font-bold text-[#222] group-hover:text-[#bf953f] transition-colors duration-500">{item.step}</span><div className="p-3 bg-black rounded-full border border-[#333]">{item.icon}</div></div>
                                         <h3 className="text-xl font-bold text-[#fcf6ba] mb-4 text-left">{item.title}</h3><p className="text-sm text-gray-400 leading-relaxed text-left">{item.desc}</p>
                                     </div>
@@ -625,7 +656,7 @@ const App = () => {
                         </div>
                     </section>
 
-                    <section id="herramientas" className="py-24 bg-[#0a0a0a]">
+                    <section id="herramientas" className="py-12 md:py-24 bg-[#0a0a0a]">
                         <div className="max-w-5xl mx-auto px-6 text-center">
                             <h2 className="text-3xl font-serif text-white font-bold mb-12">Herramientas del Agente 4.0</h2>
                             <div className="grid md:grid-cols-3 gap-8">
@@ -669,3 +700,4 @@ const App = () => {
 };
 
 export default App;
+
