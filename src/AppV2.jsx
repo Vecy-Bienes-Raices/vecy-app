@@ -46,12 +46,12 @@ const AppV2 = () => {
                     <div className="flex items-center justify-between h-24">
                         <Link to="/" className="flex-shrink-0 flex items-center gap-4 cursor-pointer">
                             <div className="relative group">
-                                <div className="absolute -inset-1 bg-gradient-to-r from-[#bf953f] to-[#aa771c] rounded-full blur opacity-50 group-hover:opacity-100 transition duration-500"></div>
-                                <img src="/logo_academia_juridica.png" alt="VECY Logo" className="relative h-14 w-14 rounded-full bg-black z-10" />
+                                <div className="absolute inset-0 bg-[#bf953f] blur-[20px] opacity-40 group-hover:opacity-70 transition duration-500 rounded-full"></div>
+                                <img src="/logo_academia_juridica.png" alt="VECY Logo" className="relative h-16 w-16 z-10" />
                             </div>
                             <div className="hidden sm:block">
-                                <span className="block font-serif text-2xl tracking-widest bg-clip-text text-transparent font-bold" style={{ backgroundImage: theme.goldGradient }}>VECY</span>
-                                <span className="block text-xs text-[#d4af37] tracking-[0.3em] uppercase mt-1">Jurídico IA</span>
+                                <span className="block font-serif text-2xl tracking-widest bg-clip-text text-transparent font-bold uppercase" style={{ backgroundImage: theme.goldGradient }}>VECY</span>
+                                <span className="block text-xs text-[#d4af37] tracking-[0.3em] uppercase mt-1">Academia</span>
                             </div>
                         </Link>
                         <div className="hidden md:block">
@@ -98,8 +98,8 @@ const AppV2 = () => {
 
             <footer className="py-12 bg-black border-t border-[#222] text-center">
                 <div className="max-w-4xl mx-auto px-6">
-                    <img src="/logo_academia_juridica.png" alt="VECY" className="h-16 w-16 mx-auto rounded-full border border-[#bf953f]/30 mb-6 grayscale hover:grayscale-0 transition-all duration-500 bg-black" />
-                    <p className="text-[#d4af37] font-serif text-lg mb-2">VECY BIENES RAÍCES</p>
+                    <img src="/logo_academia_juridica.png" alt="VECY" className="h-20 w-20 mx-auto mb-6 grayscale hover:grayscale-0 transition-all duration-500 drop-shadow-[0_0_15px_rgba(191,149,63,0.4)]" />
+                    <p className="text-[#d4af37] font-serif text-lg mb-2">VECY ACADEMIA</p>
                     <p className="text-gray-600 text-xs tracking-widest uppercase mb-8">Tecnología + Derecho + Innovación</p>
                     <div className="flex flex-col md:flex-row justify-center gap-6 text-sm text-gray-500">
                         <Link to="/legal" className="hover:text-gray-300 transition-colors text-xs uppercase tracking-widest">Aviso Legal</Link>

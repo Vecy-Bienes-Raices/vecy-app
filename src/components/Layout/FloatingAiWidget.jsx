@@ -30,16 +30,6 @@ const FloatingAiWidget = () => {
                             alt="Eddu-AI"
                             className="w-full h-full object-cover"
                         />
-                        <motion.div
-                            animate={{
-                                scale: [1, 1.5, 1],
-                                opacity: [1, 0.5, 1]
-                            }}
-                            transition={{ repeat: Infinity, duration: 2 }}
-                            className="absolute -top-2 -right-2"
-                        >
-                            <Sparkles className="w-4 h-4 text-white" />
-                        </motion.div>
                     </div>
                 </div>
 
