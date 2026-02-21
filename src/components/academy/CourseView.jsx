@@ -59,42 +59,54 @@ const CourseView = () => {
                     </p>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    {academyModules.map((module, index) => (
-                        <button
-                            key={module.id}
-                            onClick={() => setActiveModuleId(module.id)}
-                            className="group relative bg-[#0e0e0e] border border-[#333] hover:border-[#bf953f]/50 rounded-sm p-8 text-left transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_20px_40px_rgba(0,0,0,0.5),0_0_20px_rgba(191,149,63,0.1)] overflow-hidden"
-                        >
-                            {/* Number Accent */}
-                            <div className="absolute -top-4 -right-4 text-9xl font-serif font-bold text-white/[0.03] group-hover:text-[#bf953f]/[0.05] transition-colors leading-none pointer-events-none">
-                                {index + 1}
-                            </div>
-
-                            <div className="relative z-10">
-                                <div className="mb-8 p-4 w-fit rounded-xl bg-gradient-to-br from-[#1c1c1c] to-[#0a0a0a] border border-[#333] group-hover:border-[#bf953f]/30 group-hover:shadow-[0_0_15px_rgba(191,149,63,0.2)] transition-all">
-                                    <module.icon className="w-8 h-8 text-[#bf953f]" />
+                {!hasCompletedModules ? (
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                        {academyModules.map((module, index) => (
+                            <button
+                                key={module.id}
+                                onClick={() => setActiveModuleId(module.id)}
+                                className="group relative bg-[#0e0e0e] border border-[#333] hover:border-[#bf953f]/50 rounded-sm p-8 text-left transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_20px_40px_rgba(0,0,0,0.5),0_0_20px_rgba(191,149,63,0.1)] overflow-hidden"
+                            >
+                                {/* Number Accent */}
+                                <div className="absolute -top-4 -right-4 text-9xl font-serif font-bold text-white/[0.03] group-hover:text-[#bf953f]/[0.05] transition-colors leading-none pointer-events-none">
+                                    {index + 1}
                                 </div>
 
-                                <span className="text-[10px] text-[#bf953f] font-bold uppercase tracking-[0.3em] mb-4 block opacity-70 group-hover:opacity-100 transition-opacity">
-                                    {module.shortTitle}
-                                </span>
+                                <div className="relative z-10">
+                                    <div className="mb-8 p-4 w-fit rounded-xl bg-gradient-to-br from-[#1c1c1c] to-[#0a0a0a] border border-[#333] group-hover:border-[#bf953f]/30 group-hover:shadow-[0_0_15px_rgba(191,149,63,0.2)] transition-all">
+                                        <module.icon className="w-8 h-8 text-[#bf953f]" />
+                                    </div>
 
-                                <h3 className="text-2xl font-serif font-bold text-white mb-4 leading-tight group-hover:text-[#d4af37] transition-colors">
-                                    {module.title}
-                                </h3>
+                                    <span className="text-[10px] text-[#bf953f] font-bold uppercase tracking-[0.3em] mb-4 block opacity-70 group-hover:opacity-100 transition-opacity">
+                                        {module.shortTitle}
+                                    </span>
 
-                                <p className="text-sm text-gray-500 leading-relaxed mb-10 line-clamp-3">
-                                    {module.description}
-                                </p>
+                                    <h3 className="text-2xl font-serif font-bold text-white mb-4 leading-tight group-hover:text-[#d4af37] transition-colors">
+                                        {module.title}
+                                    </h3>
 
-                                <div className="flex items-center gap-2 text-[#bf953f] font-bold text-xs uppercase tracking-widest group-hover:gap-4 transition-all">
-                                    Comenzar Lectura <ChevronRight className="w-4 h-4" />
+                                    <p className="text-sm text-gray-500 leading-relaxed mb-10 line-clamp-3">
+                                        {module.description}
+                                    </p>
+
+                                    <div className="flex items-center gap-2 text-[#bf953f] font-bold text-xs uppercase tracking-widest group-hover:gap-4 transition-all">
+                                        Comenzar Lectura <ChevronRight className="w-4 h-4" />
+                                    </div>
                                 </div>
-                            </div>
-                        </button>
-                    ))}
-                </div>
+                            </button>
+                        ))}
+                    </div>
+                ) : (
+                    <div className="bg-[#111] border border-[#333] p-12 rounded-sm text-center mb-16 shadow-2xl animate-fade-in">
+                        <div className="inline-block p-4 rounded-full bg-green-500/10 border border-green-500/30 mb-6">
+                            <Trophy className="w-10 h-10 text-green-500" />
+                        </div>
+                        <h2 className="text-3xl font-serif font-bold text-white mb-4">¡Módulos Completados con Éxito!</h2>
+                        <p className="text-gray-400 max-w-xl mx-auto font-light leading-relaxed">
+                            Has finalizado la etapa teórica de la Academia VECY. Ahora estás facultado para presentar el examen de certificación y obtener tu diploma oficial.
+                        </p>
+                    </div>
+                )}
 
                 {/* EXAM SECTION - Only visible after completing modules */}
                 {hasCompletedModules && (

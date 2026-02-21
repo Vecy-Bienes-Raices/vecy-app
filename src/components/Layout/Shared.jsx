@@ -5,7 +5,8 @@ import { motion } from 'framer-motion';
 // --- UTILS ---
 export const FormatText = ({ text }) => {
     if (!text) return null;
-    const parts = text.split(/(\*\*.*?\*\*)/g);
+    // Split by **bold** or *italic*
+    const parts = text.split(/(\*\*.*?\*\*|\*.*?\*)/g);
     return (
         <span>
             {parts.map((part, index) => {
@@ -14,6 +15,13 @@ export const FormatText = ({ text }) => {
                         <strong key={index} className="text-[#bf953f] font-bold not-italic">
                             {part.slice(2, -2)}
                         </strong>
+                    );
+                }
+                if (part.startsWith('*') && part.endsWith('*') && part.length >= 2) {
+                    return (
+                        <span key={index} className="text-[#bf953f] font-medium italic">
+                            {part.slice(1, -1)}
+                        </span>
                     );
                 }
                 return <span key={index}>{part}</span>;

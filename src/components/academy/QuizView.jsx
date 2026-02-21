@@ -97,7 +97,11 @@ const QuizView = ({ onBack }) => {
     };
 
     if (showCertificate) {
-        return <CertificateView userData={userData} score={score} onBack={() => setShowCertificate(false)} />;
+        return <CertificateView
+            userData={userData || { name: 'Estudiante VECY', idNumber: '' }}
+            score={score || 0}
+            onBack={() => setShowCertificate(false)}
+        />;
     }
 
     if (currentStep === 'intro') {
@@ -234,8 +238,8 @@ const QuizView = ({ onBack }) => {
                             </div>
                             <button
                                 onClick={() => setShowCertificate(true)}
-                                disabled={!userData.name.trim()}
-                                className={`w-full py-6 font-bold uppercase tracking-[0.3em] text-sm shadow-xl transition-all rounded-sm ${userData.name.trim()
+                                disabled={!userData?.name?.trim()}
+                                className={`w-full py-6 font-bold uppercase tracking-[0.3em] text-sm shadow-xl transition-all rounded-sm ${userData?.name?.trim()
                                     ? 'bg-gradient-to-r from-[#bf953f] to-[#aa771c] text-black hover:scale-[1.01]'
                                     : 'bg-[#222] text-gray-600 cursor-not-allowed'
                                     }`}
