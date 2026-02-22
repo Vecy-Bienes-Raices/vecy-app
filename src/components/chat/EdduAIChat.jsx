@@ -197,7 +197,15 @@ const EdduAIChat = () => {
             setAttachedFiles([]);
         } catch (error) {
             console.error("Error en Chat:", error);
-            const errorMsg = { id: Date.now() + 1, type: 'bot', text: "⚠️ **Error de Conexión:** No pude conectar con Eddu-AI.\n\nVerifica tu conexión a internet o la configuración de API." };
+            let errorText = "⚠️ **Error de Conexión:** No pude conectar con Eddu-AI.\n\nVerifica tu conexión a internet o la configuración de API.";
+
+            if (error.message === "API Key Missing") {
+                errorText = "⚠️ **Configuración Pendiente:** Falta la `VITE_GOOGLE_API_KEY` en el entorno de producción (Vercel).\n\nPor favor, agrégala en los *Environment Variables* de tu proyecto.";
+            } else if (error.message.includes("fetch")) {
+                errorText = "⚠️ **Error de Red:** No hay respuesta del servidor de IA. Revisa tu conexión.";
+            }
+
+            const errorMsg = { id: Date.now() + 1, type: 'bot', text: errorText };
             setMessages(prev => [...prev, errorMsg]);
         } finally {
             setIsTyping(false);
