@@ -64,7 +64,7 @@ const CertificateView = ({ userData, score, onBack }) => {
                     <div className="relative z-10 w-full flex flex-col md:flex-row justify-between items-end mt-12 gap-8 px-12 pb-4">
                         <div className="text-left flex flex-col items-center md:items-start relative">
                             <div className="absolute -top-16 left-0 w-48 pointer-events-none print:block">
-                                <img src="/signature-eddu.webp" alt="Firma" className="h-24 object-contain" />
+                                <img src="/signature-eddu.png" alt="Firma" className="h-24 object-contain" />
                             </div>
                             <div className="w-48 border-b-2 border-gray-400 mb-2"></div>
                             <p className="text-[#111] font-bold text-sm tracking-widest uppercase">EDUARDO RIVERA (EDDU-AI)</p>
