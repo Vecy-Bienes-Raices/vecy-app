@@ -236,7 +236,7 @@ const EdduAIChat = () => {
                 <div className="flex items-center gap-4">
                     <div className="relative">
                         <img
-                            src="/Eddu-AI.webp"
+                            src="/Eddu-AI.png"
                             alt="Eddu-AI Avatar"
                             className="w-14 h-14 rounded-full object-cover border-2 border-[#d4af37] shadow-[0_0_20px_rgba(212,175,55,0.5)] bg-black"
                             fetchpriority="high"
