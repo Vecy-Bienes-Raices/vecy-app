@@ -16,34 +16,52 @@ export const localDocumentTemplates = {
     cobro: `ASUNTO: **RECLAMACIÓN PREJURÍDICA DE HONORARIOS** - INMUEBLE [DIRECCIÓN]\n\nRespetados señores,\n\nMe dirijo a ustedes para solicitar el pago de la comisión derivada de la venta del inmueble de la referencia, perfeccionada con el cliente [NOMBRE] presentado por mi gestión.\n\n**HECHOS:**\n1. El día [FECHA], presenté al cliente vía correo electrónico (ver anexo).\n2. Se realizó la visita con su autorización.\n3. El negocio se cerró por valor de [VALOR].\n\n**FUNDAMENTO JURÍDICO:**\nSegún el **Código de Comercio** y la **Ley 527 de 1999**, existe un contrato de corretaje perfeccionado por el intercambio de mensajes de datos y la gestión efectiva.\n\nSolicito el pago inmediato para evitar el traslado de este cobro a la instancia judicial.\n\nAtentamente,\n\n[TU NOMBRE]\nDepartamento Jurídico`
 };
 
-export const callGemini = async (prompt, systemInstruction = "") => {
+/**
+ * callGemini - Versión 2.1 (Compatible & Multimodal)
+ * @param {Array|String} historyOrPrompt - Historial (Array) o Prompt simple (String)
+ * @param {Array|String} newPartsOrSystem - Nuevas partes (Array) o Instrucción sistema (String)
+ */
+export const callGemini = async (historyOrPrompt = [], newPartsOrSystem = []) => {
     const apiKey = import.meta.env.VITE_GOOGLE_API_KEY;
-    if (!apiKey) throw new Error("No API Key");
+    if (!apiKey) {
+        console.error("VITE_GOOGLE_API_KEY no configurada.");
+        throw new Error("API Key Missing");
+    }
 
-    // LISTA DE MODELOS A PROBAR (MÁXIMA POTENCIA 3.1)
+    let history = [];
+    let newParts = [];
+
+    // Lógica de compatibilidad
+    if (typeof historyOrPrompt === 'string') {
+        const prompt = historyOrPrompt;
+        const systemInstruction = typeof newPartsOrSystem === 'string' ? newPartsOrSystem : "";
+        newParts = [
+            { text: systemInstruction ? `INSTRUCCIONES DEL SISTEMA:\n${systemInstruction}\n\n` : "" },
+            { text: prompt }
+        ];
+    } else {
+        history = historyOrPrompt;
+        newParts = newPartsOrSystem;
+    }
+
     const modelsToTry = [
-        "gemini-3.1-pro-preview",
-        "gemini-3-pro-preview",
-        "gemini-2.5-pro",
-        "gemini-1.5-pro"
+        "gemini-2.0-flash",
+        "gemini-2.0-flash-exp",
+        "gemini-1.5-flash"
     ];
 
     for (const model of modelsToTry) {
         try {
-            console.log(`Intentando conectar con modelo: ${model}...`);
             const response = await fetch(
                 `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`,
                 {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
-                        contents: [{
-                            role: 'user',
-                            parts: [
-                                { text: systemInstruction ? `INSTRUCCIONES DEL SISTEMA:\n${systemInstruction}\n\n` : "" },
-                                { text: prompt }
-                            ]
-                        }],
+                        contents: [
+                            ...history,
+                            { role: 'user', parts: newParts }
+                        ],
                         generationConfig: {
                             temperature: 0.75,
                             maxOutputTokens: 8192,
@@ -61,20 +79,12 @@ export const callGemini = async (prompt, systemInstruction = "") => {
             const data = await response.json();
             if (data.candidates && data.candidates[0] && data.candidates[0].content) {
                 const parts = data.candidates[0].content.parts || [];
-                const fullText = parts
-                    .filter(p => p.text)
-                    .map(p => p.text)
-                    .join('\n');
-                if (fullText.trim()) {
-                    console.log(`¡Éxito con modelo: ${model}!`);
-                    return fullText;
-                }
+                return parts.filter(p => p.text).map(p => p.text).join('\n');
             }
         } catch (e) {
             console.error(`Error de red con ${model}`, e);
         }
     }
 
-    console.error("Todos los modelos de IA fallaron. Verifica tu API Key o cuota.");
-    throw new Error("Local Fallback Triggered: All models failed.");
+    throw new Error("Todos los modelos de IA fallaron.");
 };

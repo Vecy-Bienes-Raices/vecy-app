@@ -59,16 +59,6 @@ const EdduAIChat = () => {
     };
 
     const removeAttachedFile = (id) => setAttachedFiles(prev => prev.filter(f => f.id !== id));
-    const navigate = useNavigate();
-
-    const isInitialMount = useRef(true);
-
-    useEffect(() => {
-        if (isInitialMount.current) {
-            isInitialMount.current = false;
-            return;
-        }
-    }, [messages]);
 
     useEffect(() => {
         if (textareaRef.current) {
@@ -146,28 +136,15 @@ const EdduAIChat = () => {
             📚 BASE DE CONOCIMIENTO MAESTRA (NIVEL EXPERTO)
             ────────────────────────────────────────────
 
-            ⚖️ 1. CONTRATO DE CORRETAJE (Tu especialidad más profunda):
-            - Art. 1340-1346 Código de Comercio
-            - La COMISIÓN se devenga cuando el corredor es la CAUSA EFICIENTE del negocio.
-            - Jurisprudencia: CSJ gestión efectiva.
-
-            ⚖️ 2. COMPRAVENTA DE INMUEBLES (Código Civil Art. 1849 y ss.)
-            ⚖️ 3. PERMUTA DE INMUEBLES (Código Civil Art. 1955 y ss.)
-            ⚖️ 4. ARRENDAMIENTO DE VIVIENDA URBANA (Ley 820 de 2003)
-            ⚖️ 5. ARRENDAMIENTO COMERCIAL (Código de Comercio Art. 518 y ss.)
-            ⚖️ 6. PROPIEDAD HORIZONTAL (Ley 675 de 2001)
-            ⚖️ 7. ESTUDIO DE TÍTULOS
-            ⚖️ 8. JURISPRUDENCIA APLICADA
+            ⚖️ 1. CONTRATO DE CORRETAJE: Art. 1340-1346 Código de Comercio.
+            ⚖️ 2. COMPRAVENTA DE INMUEBLES: Código Civil Art. 1849 y ss.
+            ⚖️ 3. ARRENDAMIENTO URBANO: Ley 820 de 2003.
+            ⚖️ 4. PROPIEDAD HORIZONTAL: Ley 675 de 2001.
 
             ────────────────────────────────────────────
-            🧠 PROTOCOLO DE ANÁLISIS DE CASOS
+            🧠 PROTOCOLO DE ANÁLISIS DE CASOS: 1. SITUACIÓN. 2. LEY. 3. RIESGO/VENTAJA. 4. QUÉ HACER.
             ────────────────────────────────────────────
-            1. SITUACIÓN. 2. LEY. 3. RIESGO/VENTAJA. 4. QUÉ HACER.
-
-            ────────────────────────────────────────────
-            ✍️ ESTILO DE COMUNICACIÓN (OBLIGATORIO)
-            ────────────────────────────────────────────
-            Conciso, TUTEA SIEMPRE, termina tus ideas, tono profesional y seguro.
+            Conciso, TUTEA SIEMPRE, tono profesional y seguro.
         `;
 
         try {
@@ -192,35 +169,39 @@ const EdduAIChat = () => {
             });
 
             let responseText;
+            const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
 
-            try {
-                const backendRes = await fetch('http://localhost:3800/api/chat', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ history, newParts })
-                });
-
-                if (backendRes.ok) {
-                    const backendData = await backendRes.json();
-                    responseText = backendData.text;
-                } else {
-                    throw new Error(`Backend HTTP ${backendRes.status}`);
+            if (isLocal) {
+                try {
+                    const backendRes = await fetch('http://localhost:3800/api/chat', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ history, newParts })
+                    });
+                    if (backendRes.ok) {
+                        const data = await backendRes.json();
+                        responseText = data.text;
+                    } else {
+                        throw new Error('Backend error');
+                    }
+                } catch (e) {
+                    console.warn("Backend local no disponible, usando conexión directa...");
+                    responseText = await callGemini(history, newParts);
                 }
-            } catch (backendErr) {
-                responseText = await callGemini(userText, EDDU_SYSTEM_PROMPT);
+            } else {
+                responseText = await callGemini(history, newParts);
             }
 
             const botMsg = { id: Date.now() + 1, type: 'bot', text: responseText };
             setMessages(prev => [...prev, botMsg]);
             setAttachedFiles([]);
-
         } catch (error) {
             console.error("Error en Chat:", error);
-            const errorMsg = { id: Date.now() + 1, type: 'bot', text: "⚠️ **Error de Conexión:** No pude conectar.\n\nAsegúrese de que el servidor backend esté corriendo." };
+            const errorMsg = { id: Date.now() + 1, type: 'bot', text: "⚠️ **Error de Conexión:** No pude conectar con Eddu-AI.\n\nVerifica tu conexión a internet o la configuración de API." };
             setMessages(prev => [...prev, errorMsg]);
+        } finally {
+            setIsTyping(false);
         }
-
-        setIsTyping(false);
     };
 
     const handleKeyDown = (e) => {
@@ -260,8 +241,8 @@ const EdduAIChat = () => {
                         className={`flex ${msg.type === 'user' ? 'justify-end' : 'justify-start'}`}
                     >
                         <div className={`max-w-[92%] md:max-w-[85%] rounded-2xl p-3.5 ${msg.type === 'user'
-                            ? 'bg-gradient-to-br from-[#2a1f00] to-[#1a1400] border border-[#d4af37]/40 text-[#FFF5CC] rounded-tr-none shadow-[0_2px_12px_rgba(212,175,55,0.15)] content-compact'
-                            : 'bg-gradient-to-br from-[#161410] to-[#0e0c0a] border border-[#bf953f]/35 text-gray-100 rounded-tl-none shadow-[0_2px_16px_rgba(191,149,63,0.12)] content-compact'
+                            ? 'bg-gradient-to-br from-[#2a1f00] to-[#1a1400] border border-[#d4af37]/40 text-[#FFF5CC] rounded-tr-none shadow-[0_2px_12px_rgba(212,175,55,0.15)]'
+                            : 'bg-gradient-to-br from-[#161410] to-[#0e0c0a] border border-[#bf953f]/35 text-gray-100 rounded-tl-none shadow-[0_2px_16px_rgba(191,149,63,0.12)]'
                             }`}>
                             <div className="text-sm leading-relaxed whitespace-pre-line font-light">
                                 {msg.type === 'bot' && index === messages.length - 1 ? (
@@ -271,7 +252,6 @@ const EdduAIChat = () => {
                                 )}
                             </div>
 
-                            {/* Visualización de archivos adjuntos */}
                             {msg.files && msg.files.length > 0 && (
                                 <div className="mt-3 flex flex-wrap gap-2 pt-2 border-t border-white/10">
                                     {msg.files.map((file, fIdx) => (
