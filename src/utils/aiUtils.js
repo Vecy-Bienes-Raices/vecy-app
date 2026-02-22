@@ -46,9 +46,13 @@ export const callGemini = async (historyOrPrompt = [], newPartsOrSystem = []) =>
 
     const modelsToTry = [
         "gemini-2.0-flash",
-        "gemini-2.0-flash-exp",
-        "gemini-1.5-flash"
+        "gemini-1.5-flash",
+        "gemini-1.5-pro",
+        "gemini-3.1-pro-preview",
+        "gemini-2.0-flash-exp"
     ];
+
+    let lastError = "No response from any model";
 
     for (const model of modelsToTry) {
         try {
@@ -73,6 +77,10 @@ export const callGemini = async (historyOrPrompt = [], newPartsOrSystem = []) =>
             if (!response.ok) {
                 const errText = await response.text();
                 console.warn(`Fallo con ${model}:`, errText);
+                try {
+                    const parsedErr = JSON.parse(errText);
+                    lastError = parsedErr.error?.message || errText;
+                } catch(e) { lastError = errText; }
                 continue;
             }
 
@@ -83,8 +91,9 @@ export const callGemini = async (historyOrPrompt = [], newPartsOrSystem = []) =>
             }
         } catch (e) {
             console.error(`Error de red con ${model}`, e);
+            lastError = e.message;
         }
     }
 
-    throw new Error("Todos los modelos de IA fallaron.");
+    throw new Error(`IA_FAILED: ${lastError}`);
 };

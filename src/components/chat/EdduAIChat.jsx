@@ -201,6 +201,9 @@ const EdduAIChat = () => {
 
             if (error.message === "API Key Missing") {
                 errorText = "⚠️ **Configuración Pendiente:** Falta la `VITE_GOOGLE_API_KEY` en el entorno de producción (Vercel).\n\nPor favor, agrégala en los *Environment Variables* de tu proyecto.";
+            } else if (error.message.startsWith("IA_FAILED:")) {
+                const rawError = error.message.replace("IA_FAILED: ", "");
+                errorText = `⚠️ **Error de la IA:** ${rawError}\n\nRevisa tu cuota de Google o la validez de tu llave API.`;
             } else if (error.message.includes("fetch")) {
                 errorText = "⚠️ **Error de Red:** No hay respuesta del servidor de IA. Revisa tu conexión.";
             }
