@@ -33,8 +33,11 @@ const HomePage = () => {
                         <Award className="w-4 h-4 text-[#bf953f]" />
                         <span className="text-gray-300 text-xs font-bold tracking-[0.2em] uppercase">Máster en Derecho Inmobiliario Digital</span>
                     </div>
-                    <h1 className="text-3xl md:text-6xl font-serif font-bold mb-8 leading-tight text-white drop-shadow-lg">El Correo Electrónico: <br /><span className="bg-clip-text text-transparent" style={{ backgroundImage: theme.goldGradient }}>Tu Seguro de Vida Inmobiliario</span></h1>
-                    <p className="text-lg md:text-xl text-gray-400 mb-12 max-w-3xl mx-auto font-light leading-relaxed border-l-2 border-[#333] pl-6 text-left md:text-center md:border-l-0 md:border-t-0">En el mundo jurídico, lo que no está escrito no existe. <br className="hidden md:block" />Descubre por qué <span className="text-white font-semibold">WhatsApp es un riesgo procesal</span> y el <span className="text-white font-semibold">Correo es tu salvaguarda patrimonial</span>.</p>
+                    <h1 className="text-4xl md:text-6xl font-serif font-bold mb-8 leading-tight text-white drop-shadow-xl animate-title-fade">El Correo Electrónico: <br /><span className="bg-clip-text text-transparent" style={{ backgroundImage: theme.goldGradient }}>Tu Seguro de Vida Inmobiliario</span></h1>
+                    <p className="text-base md:text-xl text-gray-400 mb-12 max-w-3xl mx-auto font-light leading-relaxed border-l-2 border-[#bf953f]/30 pl-6 text-left md:text-center md:border-l-0 md:border-t-0">
+                        En el mundo jurídico, lo que no está escrito no existe. <br className="hidden md:block" />
+                        Descubre por qué <span className="text-white font-semibold">WhatsApp es un riesgo procesal</span> y el <span className="text-white font-semibold">Correo es tu salvaguarda patrimonial</span>.
+                    </p>
                     <div className="flex flex-col md:flex-row gap-6 justify-center items-center">
                         <Link to="/academia" className="btn-gold-premium">Iniciar Curso</Link>
                         <a href="#estrategia" className="text-[#d4af37] hover:text-white flex items-center gap-2 text-sm font-semibold tracking-widest transition-colors uppercase border-b border-[#333] pb-1 hover:border-white">Ver Estrategia VECY <ChevronDown className="w-4 h-4" /></a>
@@ -85,7 +88,7 @@ const HomePage = () => {
                                 { title: "Disponibilidad", chat: "Baja. Riesgo de pérdida.", email: "Alta. Nube redundante." },
                             ].map((row, idx) => (
                                 <div key={idx} className="bg-[#111] border border-[#333] rounded-sm p-6">
-                                    <h4 className="text-[#bf953f] font-serif font-bold text-lg mb-4 border-b border-[#222] pb-2">{row.title}</h4>
+                                    <h4 className="text-[#bf953f] font-serif font-bold text-lg mb-4 border-b border-[#bf953f]/20 pb-2">{row.title}</h4>
                                     <div className="space-y-4">
                                         <div className="flex items-start gap-3">
                                             <XCircle className="w-5 h-5 text-red-600 shrink-0 mt-1" />

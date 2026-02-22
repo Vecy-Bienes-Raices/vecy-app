@@ -36,6 +36,7 @@ const AppV2 = () => {
                 .custom-scrollbar::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
                 .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #bf953f; }
                 body { background-color: #000000; overflow-x: hidden; }
+                img { image-rendering: -webkit-optimize-contrast; image-rendering: crisp-edges; }
             `}</style>
 
             <ScrollToTop />
@@ -47,7 +48,7 @@ const AppV2 = () => {
                         <Link to="/" className="flex-shrink-0 flex items-center gap-4 cursor-pointer">
                             <div className="relative group">
                                 <div className="absolute inset-0 bg-[#bf953f] blur-[20px] opacity-40 group-hover:opacity-70 transition duration-500 rounded-full"></div>
-                                <img src="/logo_academia_juridica.png" alt="VECY Logo" className="relative h-16 w-16 z-10" />
+                                <img src="/logo_academia_juridica.webp" alt="VECY Logo" className="relative h-16 w-16 z-10" fetchpriority="high" />
                             </div>
                             <div className="hidden sm:block">
                                 <span className="block font-serif text-2xl tracking-widest bg-clip-text text-transparent font-bold uppercase" style={{ backgroundImage: theme.goldGradient }}>VECY</span>
@@ -94,11 +95,13 @@ const AppV2 = () => {
                 </Routes>
             </AnimatePresence>
 
-            <FloatingAiWidget />
+            <div className="print:hidden">
+                <FloatingAiWidget />
+            </div>
 
             <footer className="py-12 bg-black border-t border-[#222] text-center">
                 <div className="max-w-4xl mx-auto px-6">
-                    <img src="/logo_academia_juridica.png" alt="VECY" className="h-20 w-20 mx-auto mb-6 grayscale hover:grayscale-0 transition-all duration-500 drop-shadow-[0_0_15px_rgba(191,149,63,0.4)]" />
+                    <img src="/logo_academia_juridica.webp" alt="VECY" className="h-20 w-20 mx-auto mb-6 grayscale hover:grayscale-0 transition-all duration-500 drop-shadow-[0_0_15px_rgba(191,149,63,0.4)]" loading="lazy" />
                     <p className="text-[#d4af37] font-serif text-lg mb-2">VECY ACADEMIA</p>
                     <p className="text-gray-600 text-xs tracking-widest uppercase mb-8">Tecnología + Derecho + Innovación</p>
                     <div className="flex flex-col md:flex-row justify-center gap-6 text-sm text-gray-500">

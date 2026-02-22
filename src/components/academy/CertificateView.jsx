@@ -62,10 +62,13 @@ const CertificateView = ({ userData, score, onBack }) => {
 
                     {/* Footer of Certificate */}
                     <div className="relative z-10 w-full flex flex-col md:flex-row justify-between items-end mt-12 gap-8 px-12 pb-4">
-                        <div className="text-left">
+                        <div className="text-left flex flex-col items-center md:items-start relative">
+                            <div className="absolute -top-16 left-0 w-48 pointer-events-none print:block">
+                                <img src="/signature-eddu.webp" alt="Firma" className="h-24 object-contain" />
+                            </div>
                             <div className="w-48 border-b-2 border-gray-400 mb-2"></div>
                             <p className="text-[#111] font-bold text-sm tracking-widest uppercase">EDUARDO RIVERA (EDDU-AI)</p>
-                            <p className="text-gray-500 text-xs font-light">Maestro de la Academia VECY</p>
+                            <p className="text-gray-500 text-xs font-light">CEO-VECY Academia Jurídica</p>
                         </div>
 
                         <div className="flex flex-col items-center">
@@ -113,9 +116,21 @@ const CertificateView = ({ userData, score, onBack }) => {
 
             <style>{`
                 @media print {
-                    body { background: white !important; }
-                    nav, footer, .print\\:hidden { display: none !important; }
-                    .max-w-5xl { max-width: 100% !important; margin: 0 !important; width: 100% !important; }
+                    @page { size: auto; margin: 0; }
+                    body { background: white !important; margin: 0 !important; padding: 0 !important; }
+                    nav, footer, .print\\:hidden, .actions-footer, button { display: none !important; }
+                    .max-w-5xl { max-width: 100% !important; margin: 0 !important; width: 100% !important; padding: 0 !important; }
+                    .rounded-sm { border-radius: 0 !important; border: none !important; }
+                    .shadow-2xl, .shadow-[0_0_60px_rgba(0,0,0,0.5)] { box-shadow: none !important; }
+                    .relative.bg-white { 
+                        min-height: 100vh !important; 
+                        height: 100vh !important; 
+                        display: flex !important; 
+                        flex-direction: column !important; 
+                        justify-content: space-between !important; 
+                        padding: 2cm !important;
+                        border: none !important;
+                    }
                 }
             `}</style>
         </PageTransition>

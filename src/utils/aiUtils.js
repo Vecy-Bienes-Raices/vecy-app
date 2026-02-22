@@ -20,11 +20,12 @@ export const callGemini = async (prompt, systemInstruction = "") => {
     const apiKey = import.meta.env.VITE_GOOGLE_API_KEY;
     if (!apiKey) throw new Error("No API Key");
 
-    // LISTA DE MODELOS A PROBAR
+    // LISTA DE MODELOS A PROBAR (MÁXIMA POTENCIA 3.1)
     const modelsToTry = [
-        "gemini-2.0-flash-exp",
-        "gemini-1.5-pro",
-        "gemini-1.5-flash"
+        "gemini-3.1-pro-preview",
+        "gemini-3-pro-preview",
+        "gemini-2.5-pro",
+        "gemini-1.5-pro"
     ];
 
     for (const model of modelsToTry) {

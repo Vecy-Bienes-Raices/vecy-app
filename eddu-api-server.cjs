@@ -6,13 +6,28 @@
 const http = require('http');
 const https = require('https');
 
+// Cargar .env manualmente (ya que no hay dotenv instalado)
+const fs = require('fs');
+const path = require('path');
+try {
+    const envPath = path.join(__dirname, '.env');
+    if (fs.existsSync(envPath)) {
+        const envFile = fs.readFileSync(envPath, 'utf8');
+        envFile.split('\n').forEach(line => {
+            const [key, ...value] = line.split('=');
+            if (key && value) process.env[key.trim()] = value.join('=').trim();
+        });
+    }
+} catch (e) { console.error("Error cargando .env:", e); }
+
 const PORT = 3800;
 const API_KEY = process.env.VITE_GOOGLE_API_KEY;
 
 const MODELS = [
-    'gemini-2.0-flash-exp',
-    'gemini-1.5-pro',
-    'gemini-1.5-flash'
+    'gemini-3.1-pro-preview', // EL CEREBRO MÁXIMO (ACTIVADO)
+    'gemini-3-pro-preview',
+    'gemini-2.5-pro',
+    'gemini-1.5-pro'
 ];
 
 // Función para llamar a Gemini API con Search Grounding y Memoria
@@ -21,7 +36,7 @@ async function callGemini(contents, withSearch = true) {
         const body = JSON.stringify({
             contents, // Enviar historial completo
             ...(withSearch ? { tools: [{ googleSearch: {} }] } : {}),
-            generationConfig: { temperature: 0.7, maxOutputTokens: 2048 }
+            generationConfig: { temperature: 0.7, maxOutputTokens: 8192 }
         });
 
         const result = await new Promise((resolve) => {
@@ -96,6 +111,20 @@ const server = http.createServer(async (req, res) => {
         return;
     }
 
+    if (req.method === 'GET' && req.url === '/') {
+        res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
+        res.end(`
+            <div style="font-family: sans-serif; text-align: center; padding: 50px; background: #0e0e0e; color: #d4af37; height: 100vh;">
+                <h1>🏛️ EDDU-AI Backend v4.0</h1>
+                <p>Estado: <span style="color: #10b981;">● EN LÍNEA</span></p>
+                <p>Cerebro Principal: <b>Gemini 3.1 Pro Preview</b></p>
+                <hr style="border: 0; border-top: 1px solid #333; width: 300px; margin: 20px auto;">
+                <p style="color: #666; font-size: 12px;">Para depuración: El puerto 3800 está respondiendo correctamente.</p>
+            </div>
+        `);
+        return;
+    }
+
     res.writeHead(404);
     res.end(JSON.stringify({ error: 'Ruta no encontrada' }));
 });
@@ -104,5 +133,5 @@ server.listen(PORT, () => {
     console.log(`\n🟢 EDDU-AI Backend corriendo en http://localhost:${PORT}`);
     console.log(`   Modelos: ${MODELS.join(' → ')}`);
     console.log(`   Google Search Grounding: ACTIVO`);
-    console.log(`   API Key: ...${API_KEY.slice(-4)}\n`);
+    console.log(`   API Key: ${API_KEY ? `...${API_KEY.slice(-4)}` : 'NO CONFIGURADA'}\n`);
 });

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Paperclip, Send } from 'lucide-react';
+import { Paperclip, Send, FileText, Image as ImageIcon, ExternalLink } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { callGemini } from '../../utils/aiUtils';
 import { FormatText, TypewriterText, detectGender } from '../Layout/Shared';
@@ -81,8 +81,12 @@ const EdduAIChat = () => {
         if ((!input.trim() && attachedFiles.length === 0) || isTyping) return;
 
         const userText = input.trim();
-        const displayText = userText || (attachedFiles.length > 0 ? `📎 ${attachedFiles.map(f => f.name).join(', ')}` : '');
-        const userMsg = { id: Date.now(), type: 'user', text: displayText };
+        const userMsg = {
+            id: Date.now(),
+            type: 'user',
+            text: userText || (attachedFiles.length > 0 ? 'Analizando archivos adjuntos...' : ''),
+            files: [...attachedFiles]
+        };
 
         setMessages(prev => [...prev, userMsg]);
         setInput('');
@@ -232,9 +236,10 @@ const EdduAIChat = () => {
                 <div className="flex items-center gap-4">
                     <div className="relative">
                         <img
-                            src="/Eddu-AI.png"
+                            src="/Eddu-AI.webp"
                             alt="Eddu-AI Avatar"
                             className="w-14 h-14 rounded-full object-cover border-2 border-[#d4af37] shadow-[0_0_20px_rgba(212,175,55,0.5)] bg-black"
+                            fetchpriority="high"
                         />
                         <div className="absolute bottom-0 right-0 w-3 h-3 bg-[#10b981] rounded-full border-2 border-[#1c1c1c]"></div>
                     </div>
@@ -265,6 +270,22 @@ const EdduAIChat = () => {
                                     <FormatText text={msg.text} />
                                 )}
                             </div>
+
+                            {/* Visualización de archivos adjuntos */}
+                            {msg.files && msg.files.length > 0 && (
+                                <div className="mt-3 flex flex-wrap gap-2 pt-2 border-t border-white/10">
+                                    {msg.files.map((file, fIdx) => (
+                                        <div key={fIdx} className="flex items-center gap-2 bg-black/40 px-3 py-2 rounded-lg border border-[#d4af37]/30 text-[11px] text-[#d4af37]">
+                                            {file.mimeType?.startsWith('image/') ? (
+                                                <ImageIcon className="w-4 h-4" />
+                                            ) : (
+                                                <FileText className="w-4 h-4" />
+                                            )}
+                                            <span className="truncate max-w-[120px]">{file.name}</span>
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
                         </div>
                     </div>
                 ))}
@@ -312,8 +333,8 @@ const EdduAIChat = () => {
                             onClick={handleSend}
                             disabled={isTyping || (!input.trim() && attachedFiles.length === 0)}
                             className={`!p-2 !h-[40px] !w-[50px] flex items-center justify-center transition-all duration-300 ${(isTyping || !input.trim())
-                                    ? 'btn-gold-muted'
-                                    : 'btn-gold-premium active:scale-95'
+                                ? 'btn-gold-muted'
+                                : 'btn-gold-premium active:scale-95'
                                 }`}
                         >
                             <Send className="w-5 h-5" />
