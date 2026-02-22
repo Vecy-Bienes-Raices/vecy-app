@@ -36,7 +36,7 @@ const AppV2 = () => {
                 .custom-scrollbar::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
                 .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #bf953f; }
                 body { background-color: #000000; overflow-x: hidden; }
-                img { image-rendering: -webkit-optimize-contrast; image-rendering: crisp-edges; }
+                img { image-rendering: auto; }
             `}</style>
 
             <ScrollToTop />
