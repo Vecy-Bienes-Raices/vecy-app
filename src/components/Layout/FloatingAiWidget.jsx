@@ -53,8 +53,8 @@ const FloatingAiWidget = () => {
                     </motion.div>
                 </AnimatePresence>
 
-                {/* Mobile Badge Only */}
-                <div className="md:hidden absolute -top-1 -left-1 bg-red-500 w-3 h-3 rounded-full border border-black animate-bounce shadow-md"></div>
+                {/* Mobile Badge Only - Online Green */}
+                <div className="md:hidden absolute -top-1 -left-1 bg-[#10b981] w-3 h-3 rounded-full border border-black animate-bounce shadow-md shadow-[#10b981]/40"></div>
             </Link>
         </motion.div>
     );
