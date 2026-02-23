@@ -200,13 +200,17 @@ const QuizView = ({ onBack }) => {
                                                 <div className="p-3 rounded bg-black/40 border border-[#333]">
                                                     <span className="text-gray-500 block text-[10px] uppercase font-bold mb-1">Tu Respuesta</span>
                                                     <span className={isCorrect ? 'text-green-400' : 'text-red-400'}>
-                                                        {answers[idx] !== undefined ? q.options[answers[idx]] : 'Sin responder'}
+                                                        {answers[idx] !== undefined
+                                                            ? `${['a', 'b', 'c', 'd'][answers[idx]]}) ${q.options[answers[idx]]}`
+                                                            : 'Sin responder'}
                                                     </span>
                                                 </div>
                                                 {!isCorrect && (
                                                     <div className="p-3 rounded bg-black/40 border border-[#333]">
                                                         <span className="text-gray-500 block text-[10px] uppercase font-bold mb-1">Respuesta Correcta</span>
-                                                        <span className="text-green-400">{q.options[q.correct]}</span>
+                                                        <span className="text-green-400">
+                                                            {['a', 'b', 'c', 'd'][q.correct]}) {q.options[q.correct]}
+                                                        </span>
                                                     </div>
                                                 )}
                                             </div>
@@ -336,7 +340,12 @@ const QuizView = ({ onBack }) => {
                                     onClick={() => handleAnswer(idx)}
                                     className={`w-full p-6 text-left border transition-all duration-300 flex items-center justify-between group rounded-sm ${style}`}
                                 >
-                                    <span className="text-lg font-light">{option}</span>
+                                    <div className="flex items-center gap-4">
+                                        <span className={`w-8 h-8 rounded-full border border-current flex items-center justify-center text-xs font-bold uppercase shrink-0 ${isSelected ? 'bg-current text-black' : 'text-gray-500'}`}>
+                                            {['a', 'b', 'c', 'd'][idx]}
+                                        </span>
+                                        <span className="text-lg font-light">{option}</span>
+                                    </div>
                                     <div className={`w-6 h-6 rounded-full border flex items-center justify-center transition-colors shrink-0 ml-4 ${isSelected
                                         ? (showFeedback ? (isCorrect ? 'bg-green-500' : 'bg-red-500') : 'bg-[#bf953f]')
                                         : 'bg-transparent border-[#444]'
