@@ -167,6 +167,7 @@ const EdduAIChat = () => {
         try {
             const history = messages
                 .filter(m => m.text)
+                .slice(-10) // PODA DE MEMORIA: Solo enviamos los últimos 10 mensajes para ahorrar tokens
                 .map(m => ({
                     role: m.type === 'bot' ? 'model' : 'user',
                     parts: [{ text: m.text }]

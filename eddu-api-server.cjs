@@ -24,10 +24,10 @@ const PORT = 3800;
 const API_KEY = process.env.VITE_GOOGLE_API_KEY;
 
 const MODELS = [
-    'gemini-3.1-pro-preview', // EL CEREBRO MÁXIMO (ACTIVADO)
-    'gemini-3-pro-preview',
-    'gemini-2.5-pro',
-    'gemini-1.5-pro'
+    'gemini-1.5-flash',       // ECONÓMICO Y VELOZ (RECOMENDADO)
+    'gemini-2.0-flash-exp',
+    'gemini-1.5-pro',
+    'gemini-3.1-pro-preview'
 ];
 
 // Función para llamar a Gemini API con Search Grounding y Memoria
@@ -99,7 +99,11 @@ const server = http.createServer(async (req, res) => {
                 let contents = history || [];
                 contents.push({ role: 'user', parts: newParts });
 
-                const text = await callGemini(contents, true); // Con Search Grounding
+                // Solo activar búsqueda si el usuario parece requerir datos externos actuales
+                const userText = newParts.map(p => p.text).join(' ').toLowerCase();
+                const needsSearch = /(actualidad|noticias|hoy|precio dólar|clima|busca en internet)/.test(userText);
+
+                const text = await callGemini(contents, needsSearch); 
                 res.writeHead(200, { 'Content-Type': 'application/json' });
                 res.end(JSON.stringify({ text }));
             } catch (e) {

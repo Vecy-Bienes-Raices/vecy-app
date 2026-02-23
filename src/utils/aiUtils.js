@@ -45,11 +45,10 @@ export const callGemini = async (historyOrPrompt = [], newPartsOrSystem = []) =>
     }
 
     const modelsToTry = [
-        "gemini-2.0-flash",
-        "gemini-1.5-flash",
+        "gemini-1.5-flash",        // MUCHO MÁS BARATO Y RÁPIDO
+        "gemini-2.0-flash-exp",
         "gemini-1.5-pro",
-        "gemini-3.1-pro-preview",
-        "gemini-2.0-flash-exp"
+        "gemini-2.0-flash"
     ];
 
     let lastError = "No response from any model";
