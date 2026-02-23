@@ -45,10 +45,10 @@ export const callGemini = async (historyOrPrompt = [], newPartsOrSystem = []) =>
     }
 
     const modelsToTry = [
-        "gemini-1.5-flash",        // MUCHO MÁS BARATO Y RÁPIDO
-        "gemini-2.0-flash-exp",
-        "gemini-1.5-pro",
-        "gemini-2.0-flash"
+        "gemini-1.5-flash",        // ULTRA-ESTABLE Y ECONÓMICO
+        "gemini-1.5-pro",          // ESTABLE Y POTENTE
+        "gemini-2.0-flash",        // ESTABLE (GA)
+        "gemini-1.5-flash-8b"      // RESPALDO FINAL
     ];
 
     let lastError = "No response from any model";

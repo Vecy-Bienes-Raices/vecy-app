@@ -24,10 +24,10 @@ const PORT = 3800;
 const API_KEY = process.env.VITE_GOOGLE_API_KEY;
 
 const MODELS = [
-    'gemini-1.5-flash',       // ECONÓMICO Y VELOZ (RECOMENDADO)
-    'gemini-2.0-flash-exp',
-    'gemini-1.5-pro',
-    'gemini-3.1-pro-preview'
+    'gemini-1.5-flash',       // RECOMENDADO: ESTABLE Y BARATO
+    'gemini-1.5-pro',         // POTENTE Y ESTABLE
+    'gemini-2.0-flash',       // ACTUAL Y VELOZ
+    'gemini-1.5-flash-8b'     // ÚLTIMO RECURSO
 ];
 
 // Función para llamar a Gemini API con Search Grounding y Memoria
