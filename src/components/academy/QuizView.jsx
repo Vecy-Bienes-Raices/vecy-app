@@ -341,7 +341,7 @@ const QuizView = ({ onBack }) => {
                                     className={`w-full p-6 text-left border transition-all duration-300 flex items-center justify-between group rounded-sm ${style}`}
                                 >
                                     <div className="flex items-center gap-4">
-                                        <span className={`w-8 h-8 rounded-full border border-current flex items-center justify-center text-xs font-bold uppercase shrink-0 ${isSelected ? 'bg-current text-black' : 'text-gray-500'}`}>
+                                        <span className={`w-8 h-8 rounded-full border border-current flex items-center justify-center text-xs font-bold uppercase shrink-0 transition-colors ${isSelected ? 'bg-white text-black border-white' : 'text-gray-500 border-gray-500'}`}>
                                             {['a', 'b', 'c', 'd'][idx]}
                                         </span>
                                         <span className="text-lg font-light">{option}</span>
