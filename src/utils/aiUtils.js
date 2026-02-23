@@ -45,10 +45,10 @@ export const callGemini = async (historyOrPrompt = [], newPartsOrSystem = []) =>
     }
 
     const modelsToTry = [
-        "gemini-1.5-flash",        // ULTRA-ESTABLE Y ECONÓMICO
-        "gemini-1.5-pro",          // ESTABLE Y POTENTE
-        "gemini-2.0-flash",        // ESTABLE (GA)
-        "gemini-1.5-flash-8b"      // RESPALDO FINAL
+        "gemini-2.5-flash",        // ÚLTIMA GENERACIÓN (GA) - RECOMENDADO POR EL USUARIO
+        "gemini-1.5-flash",        // ULTRA-ESTABLE
+        "gemini-1.5-pro",          // POTENTE
+        "gemini-2.0-flash"         // ESTABLE
     ];
 
     let lastError = "No response from any model";
@@ -56,7 +56,7 @@ export const callGemini = async (historyOrPrompt = [], newPartsOrSystem = []) =>
     for (const model of modelsToTry) {
         try {
             const response = await fetch(
-                `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`,
+                `https://generativelanguage.googleapis.com/v1/models/${model}:generateContent?key=${apiKey}`,
                 {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },

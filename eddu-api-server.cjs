@@ -24,10 +24,10 @@ const PORT = 3800;
 const API_KEY = process.env.VITE_GOOGLE_API_KEY;
 
 const MODELS = [
-    'gemini-1.5-flash',       // RECOMENDADO: ESTABLE Y BARATO
-    'gemini-1.5-pro',         // POTENTE Y ESTABLE
-    'gemini-2.0-flash',       // ACTUAL Y VELOZ
-    'gemini-1.5-flash-8b'     // ÚLTIMO RECURSO
+    'gemini-2.5-flash',       // ÚLTIMA GENERACIÓN (MÁS VELOZ Y CAPAZ)
+    'gemini-1.5-flash',       // ESTABLE Y BARATO
+    'gemini-1.5-pro',         // POTENTE
+    'gemini-2.0-flash'        // ESTABLE
 ];
 
 // Función para llamar a Gemini API con Search Grounding y Memoria
@@ -42,7 +42,7 @@ async function callGemini(contents, withSearch = true) {
         const result = await new Promise((resolve) => {
             const options = {
                 hostname: 'generativelanguage.googleapis.com',
-                path: `/v1beta/models/${model}:generateContent?key=${API_KEY}`,
+                path: `/v1/models/${model}:generateContent?key=${API_KEY}`,
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json', 'Content-Length': Buffer.byteLength(body) }
             };
