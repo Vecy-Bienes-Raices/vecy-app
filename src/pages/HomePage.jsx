@@ -159,10 +159,10 @@ const HomePage = () => {
                             </Link>
                         </div>
                         <div className="bg-[#1c1c1c] p-8 rounded-sm border border-[#333] flex flex-col items-center hover:border-gray-500 transition-colors">
-                            <Mail className="w-12 h-12 text-[#10b981] mb-6" /><h3 className="text-xl font-bold text-white mb-2">MailSuite</h3><p className="text-sm text-gray-400 mb-6 max-w-sm text-center">Rastreo de apertura de correos.</p><Link to="/soporte" className="text-[#d4af37] text-xs font-bold uppercase hover:underline">Pregúntale a Eddu</Link>
+                            <Mail className="w-12 h-12 text-[#10b981] mb-6" /><h3 className="text-xl font-bold text-white mb-2">MailSuite</h3><p className="text-sm text-gray-400 mb-6 max-w-sm text-center">Rastreo de apertura de correos.</p><Link to="/abogado-eddu-ai" className="text-[#d4af37] text-xs font-bold uppercase hover:underline">Pregúntale a Eddu</Link>
                         </div>
                         <div className="bg-[#1c1c1c] p-8 rounded-sm border border-[#333] flex flex-col items-center hover:border-gray-500 transition-colors">
-                            <FileCheck className="w-12 h-12 text-[#10b981] mb-6" /><h3 className="text-xl font-bold text-white mb-2">4-72 Certificado</h3><p className="text-sm text-gray-400 mb-6 max-w-sm text-center">Prueba de entrega oficial.</p><Link to="/soporte" className="text-[#d4af37] text-xs font-bold uppercase hover:underline">Pregúntale a Eddu</Link>
+                            <FileCheck className="w-12 h-12 text-[#10b981] mb-6" /><h3 className="text-xl font-bold text-white mb-2">4-72 Certificado</h3><p className="text-sm text-gray-400 mb-6 max-w-sm text-center">Prueba de entrega oficial.</p><Link to="/abogado-eddu-ai" className="text-[#d4af37] text-xs font-bold uppercase hover:underline">Pregúntale a Eddu</Link>
                         </div>
                     </div>
                 </div>

@@ -89,7 +89,7 @@ const AppV2 = () => {
                     <Route path="/" element={<HomePage />} />
                     <Route path="/academia" element={<CourseView />} />
                     <Route path="/generador" element={<EmailGeneratorView />} />
-                    <Route path="/soporte" element={<SupportView />} />
+                    <Route path="/abogado-eddu-ai" element={<SupportView />} />
                     <Route path="/legal" element={<LegalView />} />
                     <Route path="/datos" element={<DataPolicyView />} />
                 </Routes>
@@ -107,7 +107,7 @@ const AppV2 = () => {
                     <div className="flex flex-col md:flex-row justify-center gap-6 text-sm text-gray-500">
                         <Link to="/legal" className="hover:text-gray-300 transition-colors text-xs uppercase tracking-widest">Aviso Legal</Link>
                         <Link to="/datos" className="hover:text-gray-300 transition-colors text-xs uppercase tracking-widest">Política de Datos</Link>
-                        <Link to="/soporte" className="hover:text-gray-300 transition-colors text-xs uppercase tracking-widest">Bufete Virtual VECY</Link>
+                        <Link to="/abogado-eddu-ai" className="hover:text-gray-300 transition-colors text-xs uppercase tracking-widest">Abogado Virtual VECY</Link>
                     </div>
                     <p className="text-gray-700 text-xs mt-12">© 2026 VECY. Todos los derechos reservados.</p>
                 </div>

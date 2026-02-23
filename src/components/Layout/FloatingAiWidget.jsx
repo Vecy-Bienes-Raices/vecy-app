@@ -7,7 +7,7 @@ const FloatingAiWidget = () => {
     const location = useLocation();
 
     // Hide widget if explicitly on the support/AI page
-    if (location.pathname === '/soporte') return null;
+    if (location.pathname === '/abogado-eddu-ai') return null;
 
     return (
         <motion.div
@@ -15,7 +15,7 @@ const FloatingAiWidget = () => {
             animate={{ scale: 1, opacity: 1 }}
             className="fixed bottom-6 right-6 md:bottom-10 md:right-10 z-[100]"
         >
-            <Link to="/soporte" className="relative group block">
+            <Link to="/abogado-eddu-ai" className="relative group block">
                 {/* Pulsing Outer Glow */}
                 <div className="absolute inset-0 bg-gradient-to-r from-[#bf953f] to-[#aa771c] rounded-full blur-xl opacity-40 group-hover:opacity-80 transition-opacity animate-pulse"></div>
 
