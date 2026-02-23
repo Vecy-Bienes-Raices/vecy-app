@@ -16,15 +16,15 @@ const FloatingAiWidget = () => {
             className="fixed bottom-6 right-6 md:bottom-10 md:right-10 z-[100]"
         >
             <Link to="/abogado-eddu-ai" className="relative group block">
-                {/* Pulsing Outer Glow */}
-                <div className="absolute inset-0 bg-gradient-to-r from-[#bf953f] to-[#aa771c] rounded-full blur-xl opacity-40 group-hover:opacity-80 transition-opacity animate-pulse"></div>
+                {/* Pulsing Outer Glow - Intensified */}
+                <div className="absolute -inset-1 bg-gradient-to-r from-[#bf953f] to-[#d4af37] rounded-full blur-2xl opacity-60 group-hover:opacity-100 transition-opacity animate-pulse"></div>
 
                 {/* Secondary Pinging Ring */}
-                <div className="absolute -inset-2 bg-[#bf953f]/20 rounded-full animate-ping pointer-events-none"></div>
+                <div className="absolute -inset-4 bg-[#bf953f]/30 rounded-full animate-ping pointer-events-none"></div>
 
-                {/* Main Widget Button */}
-                <div className="relative bg-black border-2 border-[#bf953f]/50 p-1 md:p-1.5 rounded-full shadow-[0_0_30px_rgba(191,149,63,0.3)] hover:border-[#bf953f] transition-all transform hover:scale-110 active:scale-95 overflow-hidden">
-                    <div className="relative w-12 h-12 md:w-16 md:h-16 rounded-full overflow-hidden">
+                {/* Main Widget Button - Removed padding to make image fill the ring */}
+                <div className="relative bg-black border-2 border-[#d4af37] rounded-full shadow-[0_0_40px_rgba(212,175,55,0.6)] hover:border-[#bf953f] transition-all transform hover:scale-110 active:scale-95 overflow-hidden ring-4 ring-[#bf953f]/20">
+                    <div className="relative w-14 h-14 md:w-20 md:h-20 rounded-full overflow-hidden">
                         <img
                             src="/Eddu-AI.png"
                             alt="Eddu-AI"
