@@ -3,6 +3,7 @@ import { Timer, ArrowRight, ArrowLeft, CheckCircle, XCircle, Trophy, RefreshCcw,
 import { PageTransition } from '../Layout/Shared';
 import { quizData } from './ModuleRegistry';
 import CertificateView from './CertificateView';
+import { track } from '@vercel/analytics';
 
 const QuizView = ({ onBack }) => {
     const [currentStep, setCurrentStep] = useState('intro'); // 'intro' | 'active' | 'finished'
@@ -59,6 +60,7 @@ const QuizView = ({ onBack }) => {
         if (cooldownRemaining > 0) return;
         setCurrentStep('active');
         setShowFeedback(false);
+        track('exam_start');
     };
 
     const handleAnswer = (optionIdx) => {
@@ -94,6 +96,12 @@ const QuizView = ({ onBack }) => {
         }
 
         setCurrentStep('finished');
+
+        track('exam_finished', {
+            score: finalScore,
+            passed: finalScore >= quizData.passingScore,
+            correct_answers: correctCount
+        });
     };
 
     if (showCertificate) {
@@ -237,7 +245,12 @@ const QuizView = ({ onBack }) => {
                                 </div>
                             </div>
                             <button
-                                onClick={() => setShowCertificate(true)}
+                                onClick={() => {
+                                    setShowCertificate(true);
+                                    track('certificate_generated', {
+                                        student_name: userData.name
+                                    });
+                                }}
                                 disabled={!userData?.name?.trim()}
                                 className={userData?.name?.trim()
                                     ? 'btn-gold-premium w-full !text-sm !tracking-[0.3em]'

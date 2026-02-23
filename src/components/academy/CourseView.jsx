@@ -5,6 +5,7 @@ import { PageTransition } from '../Layout/Shared';
 import { academyModules } from './ModuleRegistry';
 import ModuleDetailView from './ModuleDetailView';
 import QuizView from './QuizView';
+import { track } from '@vercel/analytics';
 
 const CourseView = () => {
     const navigate = useNavigate();
@@ -64,7 +65,13 @@ const CourseView = () => {
                         {academyModules.map((module, index) => (
                             <button
                                 key={module.id}
-                                onClick={() => setActiveModuleId(module.id)}
+                                onClick={() => {
+                                    setActiveModuleId(module.id);
+                                    track('course_module_start', {
+                                        module_id: module.id,
+                                        module_title: module.shortTitle
+                                    });
+                                }}
                                 className="group relative bg-[#0e0e0e] border border-[#333] hover:border-[#bf953f]/50 rounded-sm p-8 text-left transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_20px_40px_rgba(0,0,0,0.5),0_0_20px_rgba(191,149,63,0.1)] overflow-hidden"
                             >
                                 {/* Number Accent */}
@@ -134,7 +141,10 @@ const CourseView = () => {
                                         Volver al Inicio
                                     </button>
                                     <button
-                                        onClick={() => setShowQuiz(true)}
+                                        onClick={() => {
+                                            setShowQuiz(true);
+                                            track('course_exam_init');
+                                        }}
                                         className="btn-gold-premium"
                                     >
                                         Iniciar Examen Ahora

@@ -3,6 +3,7 @@ import { Paperclip, Send, FileText, Image as ImageIcon, ExternalLink } from 'luc
 import { useNavigate } from 'react-router-dom';
 import { callGemini } from '../../utils/aiUtils';
 import { FormatText, TypewriterText, detectGender } from '../Layout/Shared';
+import { track } from '@vercel/analytics';
 
 const EdduAIChat = () => {
     const [input, setInput] = useState('');
@@ -44,6 +45,12 @@ const EdduAIChat = () => {
             reader.onload = (ev) => {
                 const base64 = ev.target.result.split(',')[1];
                 const isImage = file.type.startsWith('image/');
+
+                track('chat_file_attached', {
+                    file_type: file.type,
+                    is_image: isImage
+                });
+
                 setAttachedFiles(prev => [...prev, {
                     id: Date.now() + Math.random(),
                     name: file.name,
@@ -113,6 +120,11 @@ const EdduAIChat = () => {
                 };
                 setMessages(prev => [...prev, welcomeMsg]);
                 setIsTyping(false);
+
+                track('chat_start', {
+                    user_name: name,
+                    gender: gender
+                });
             }, 800);
             return;
         }
@@ -146,6 +158,11 @@ const EdduAIChat = () => {
             ────────────────────────────────────────────
             Conciso, TUTEA SIEMPRE, tono profesional y seguro.
         `;
+
+        track('chat_message_sent', {
+            has_attachments: attachedFiles.length > 0,
+            attachments_count: attachedFiles.length
+        });
 
         try {
             const history = messages

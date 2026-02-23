@@ -5,6 +5,7 @@ import {
 } from 'lucide-react';
 import { callGemini } from '../../utils/aiUtils';
 import { PageTransition, FormatText } from '../Layout/Shared';
+import { track } from '@vercel/analytics';
 
 const EmailGeneratorView = () => {
     const [topic, setTopic] = useState('');
@@ -43,6 +44,11 @@ const EmailGeneratorView = () => {
             const result = await callGemini(userPrompt, systemPrompt);
             setGeneratedEmail(result);
             if (previewRef.current) previewRef.current.scrollTop = 0;
+
+            track('contract_generated', {
+                topic: finalTopic,
+                details_length: details.length
+            });
         } catch (error) {
             console.error("Error generando documento:", error);
             setGeneratedEmail("Hubo un error contactando al bufete virtual. Por favor intenta de nuevo.");
@@ -50,7 +56,12 @@ const EmailGeneratorView = () => {
         setLoading(false);
     };
 
-    const copyToClipboard = () => navigator.clipboard.writeText(generatedEmail);
+    const copyToClipboard = () => {
+        navigator.clipboard.writeText(generatedEmail);
+        track('contract_copied', {
+            topic: topic === 'otro' ? customTopic : topic
+        });
+    };
 
     return (
         <PageTransition>
