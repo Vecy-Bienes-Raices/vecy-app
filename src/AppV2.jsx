@@ -88,7 +88,7 @@ const AppV2 = () => {
                 <Routes location={location} key={location.pathname}>
                     <Route path="/" element={<HomePage />} />
                     <Route path="/academia" element={<CourseView />} />
-                    <Route path="/generador" element={<EmailGeneratorView />} />
+                    <Route path="/redactor-juridico" element={<EmailGeneratorView />} />
                     <Route path="/abogado-eddu-ai" element={<SupportView />} />
                     <Route path="/legal" element={<LegalView />} />
                     <Route path="/datos" element={<DataPolicyView />} />

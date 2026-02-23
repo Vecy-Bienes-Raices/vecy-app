@@ -153,7 +153,7 @@ const HomePage = () => {
                     <h2 className="text-3xl font-serif text-white font-bold mb-12">Herramientas del Agente 4.0</h2>
                     <div className="grid md:grid-cols-3 gap-8">
                         <div className="bg-[#1c1c1c] p-8 rounded-sm border border-[#d4af37] flex flex-col items-center hover:scale-[1.02] transition-transform shadow-[0_0_20px_rgba(191,149,63,0.1)] cursor-pointer group">
-                            <Link to="/generador" className="w-full flex flex-col items-center">
+                            <Link to="/redactor-juridico" className="w-full flex flex-col items-center">
                                 <div className="relative"><div className="absolute -inset-1 bg-gradient-to-r from-[#bf953f] to-[#aa771c] rounded-full blur opacity-50 group-hover:opacity-100 transition duration-500"></div><div className="relative bg-black rounded-full p-3"><Gavel className="w-10 h-10 text-[#d4af37]" /></div></div>
                                 <h3 className="text-xl font-bold text-white mt-6 mb-2">Redactor Jurídico IA</h3><p className="text-sm text-gray-400 mb-6 max-w-sm text-center">Genera reclamaciones, acuerdos de puntas y contratos vía email.</p><button className="btn-gold-premium !px-6 !py-2">Usar Ahora ✨</button>
                             </Link>

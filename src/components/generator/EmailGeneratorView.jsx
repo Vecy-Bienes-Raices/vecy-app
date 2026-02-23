@@ -29,7 +29,8 @@ const EmailGeneratorView = () => {
         1. TONO: Formal, contundente, pero claro.
         2. FORMATO: Estructura clara con Títulos en Negrita.
         3. RESALTADO: Usa doble asterisco **Texto** para resaltar: Nombres, Fechas, Valores de Dinero, Leyes Citadas, y Plazos.
-        4. FUNDAMENTO LEGAL: Cita la normativa colombiana aplicable.
+        4. FUNDAMENTO LEGAL: Cita la normativa colombiana aplicable (Código Civil, Código de Comercio, Ley 1579, etc.).
+        5. CLÁUSULAS ESENCIALES: Si es una Promesa, incluye arras, linderos, precio, forma de pago y fecha de firma. Si es Corretaje, incluye comisión, exclusividad (si aplica) y plazo.
         `;
 
         const finalTopic = topic === 'otro' ? customTopic : topic;
@@ -88,6 +89,8 @@ const EmailGeneratorView = () => {
                             >
                                 <option value="">Seleccione una opción...</option>
                                 <option value="Presentación Formal de Cliente">Presentación Formal de Cliente</option>
+                                <option value="Promesa de Compraventa">Promesa de Compraventa</option>
+                                <option value="Contrato de Corretaje Inmobiliario">Corretaje Inmobiliario</option>
                                 <option value="Reclamación de Honorarios">Reclamación de Honorarios</option>
                                 <option value="Acuerdo de Puntas Compartidas">Acuerdo de Puntas (Colegas)</option>
                                 <option value="Terminación de Contrato de Mandato">Terminación de Contrato</option>
