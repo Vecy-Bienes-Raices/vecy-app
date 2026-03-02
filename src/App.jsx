@@ -430,7 +430,13 @@ const LegalView = ({ onBack }) => (
         <button onClick={onBack} className="flex items-center text-[#d4af37] mb-8 hover:text-white transition-colors"><ArrowLeft className="w-5 h-5 mr-2" /> Volver</button>
         <div className="max-w-4xl mx-auto bg-[#1c1c1c] p-12 rounded-sm border border-[#333] shadow-2xl">
             <h1 className="text-3xl font-serif font-bold text-white mb-8 border-b border-[#333] pb-6 flex items-center gap-3"><Scale className="w-8 h-8 text-[#d4af37]" /> Aviso Legal</h1>
-            <div className="space-y-8 text-gray-400 text-sm leading-7 text-justify"><p><strong>1. NATURALEZA DEL SERVICIO:</strong> VECY BIENES RAÍCES ofrece esta herramienta educativa sobre la Ley 527 de 1999.</p><p><strong>2. RESPONSABILIDAD:</strong> El uso de los documentos generados es responsabilidad exclusiva del agente.</p></div>
+            <div className="space-y-8 text-gray-400 text-sm leading-7 text-justify">
+                <p><strong>1. NATURALEZA DEL SERVICIO Y ASESORÍA JURÍDICA:</strong> VECY BIENES RAÍCES y VECY ACADEMIA no solo proporcionan herramientas tecnológicas y educativas, sino que también ofrecemos <strong>servicios de asesoría y representación jurídica especializada</strong>. Nuestro enfoque prioritario es la <strong>mediación y la resolución extrajudicial de conflictos</strong>. Nos especializamos en la estructuración de escritos persuasivos y requerimientos legales enviados como notificaciones mediante correos certificados, con el fin de procurar soluciones prontas sin necesidad de litigios formales, logrando objetivos como: pago de adeudos, eliminación de reportes negativos en centrales de riesgo, negociación y reducción de deudas, y cumplimiento de cláusulas penales.</p>
+                <p><strong>2. ACCESIBILIDAD Y HONORARIOS JUSTOS:</strong> Nuestra misión fundamental es brindar soluciones jurídicas de alta calidad al alcance del bolsillo de todos. Por nuestro enfoque en la mediación estratégica y la eficacia tecnológica, ofrecemos tarifas considerablemente menores al estándar de representación jurídica (nuestros honorarios oscilan entre el 10% y el 15% dependiendo de la complejidad, frente al 20% habitual del mercado).</p>
+                <p><strong>3. USO DE HERRAMIENTAS IA (REDACTOR JURÍDICO):</strong> El "Redactor Jurídico IA" genera modelos de documentos basados en el Derecho Inmobiliario y Comercial Colombiano. Si bien estas herramientas están diseñadas para apoyar la gestión autónoma del agente, el usuario asume la responsabilidad de su envío. Para garantizar el éxito en acercamientos complejos, siempre recomendamos nuestra intervención y mediación directa.</p>
+                <p><strong>4. EFICACIA PROBATORIA:</strong> Todas nuestras gestiones de mediación digital y la metodología "Blindaje VECY" se sustentan en el <strong>Principio de Equivalencia Funcional y Admisibilidad Probatoria (Ley 527 de 1999)</strong>. Toda comunicación emitida por nuestro protocolo constituye plena prueba en etapas prejudiciales e, inclusive, en etapas judiciales si la mediación fuere infructuosa.</p>
+                <p><strong>5. PROPIEDAD INTELECTUAL Y JURISDICCIÓN:</strong> VECY, "Eddu-AI", y todo material estratégico están protegidos por las leyes de propiedad intelectual de Colombia. Toda gestión que involucre nuestra plataforma se rige por la legislación de la República de Colombia.</p>
+            </div>
         </div>
     </div>
 );
@@ -440,7 +446,13 @@ const DataPolicyView = ({ onBack }) => (
         <button onClick={onBack} className="flex items-center text-[#d4af37] mb-8 hover:text-white transition-colors"><ArrowLeft className="w-5 h-5 mr-2" /> Volver</button>
         <div className="max-w-4xl mx-auto bg-[#1c1c1c] p-12 rounded-sm border border-[#333] shadow-2xl">
             <h1 className="text-3xl font-serif font-bold text-white mb-8 border-b border-[#333] pb-6 flex items-center gap-3"><Server className="w-8 h-8 text-[#10b981]" /> Política de Datos</h1>
-            <div className="space-y-6 text-gray-400 text-sm leading-relaxed"><p>Cumplimiento de la <strong>Ley 1581 de 2012</strong>. VECY promueve una política de <strong>CERO PAPEL</strong>.</p></div>
+            <div className="space-y-6 text-gray-400 text-sm leading-relaxed text-justify">
+                <p><strong>1. MARCO NORMATIVO:</strong> En estricto cumplimiento de la Ley Estatutaria 1581 de 2012 (Habeas Data) y sus decretos reglamentarios, VECY garantiza la protección y confidencialidad de los datos personales suministrados en la plataforma.</p>
+                <p><strong>2. FINALIDAD DEL TRATAMIENTO:</strong> Los datos aportados serán empleados exclusivamente para: (a) Facilitar el uso de nuestras herramientas educativas y el Redactor Jurídico IA; (b) Enviar lineamientos o actualizaciones de la plataforma; (c) Fomentar nuestra política ambiental de <strong>CERO PAPEL</strong>.</p>
+                <p><strong>3. CONFIDENCIALIDAD DEL REDACTOR IA:</strong> Entendemos el deber de reserva sobre las negociaciones inmobiliarias. Los "Detalles" introducidos en el Generador de Correos (nombres de terceros, montos, direcciones) son procesados por nuestra inteligencia artificial de manera transitoria para construir el documento y no se almacenan para entrenar modelos públicos o infringir el secreto profesional.</p>
+                <p><strong>4. DERECHOS DE LOS TITULARES:</strong> El usuario tiene derecho a conocer, actualizar, rectificar y suprimir sus datos personales, así como a revocar la autorización de su tratamiento en cualquier momento.</p>
+                <p><strong>5. CANALES Y ATENCIÓN:</strong> Para ejercer sus derechos correspondientes al Habeas Data, el titular podrá hacer uso de los canales integrados en nuestra plataforma o dirigirse a nuestros medios de contacto electrónicos.</p>
+            </div>
         </div>
     </div>
 );

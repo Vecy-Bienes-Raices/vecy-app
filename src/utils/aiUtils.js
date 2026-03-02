@@ -17,65 +17,67 @@ export const localDocumentTemplates = {
 };
 
 /**
- * callGemini - Versión 2.1 (Compatible & Multimodal)
- * @param {Array|String} historyOrPrompt - Historial (Array) o Prompt simple (String)
- * @param {Array|String} newPartsOrSystem - Nuevas partes (Array) o Instrucción sistema (String)
+ * callGemini - Versión 2.2 (System Instruction Support)
+ * @param {Array} history - Historial de la conversación
+ * @param {Array} newParts - Nuevas partes del mensaje actual
+ * @param {String} systemInstruction - Instrucción maestra del sistema
  */
-export const callGemini = async (historyOrPrompt = [], newPartsOrSystem = []) => {
+export const callGemini = async (history = [], newParts = [], systemInstruction = "") => {
     const apiKey = import.meta.env.VITE_GOOGLE_API_KEY;
     if (!apiKey) {
         console.error("VITE_GOOGLE_API_KEY no configurada.");
         throw new Error("API Key Missing");
     }
 
-    let history = [];
-    let newParts = [];
-
-    // Lógica de compatibilidad
-    if (typeof historyOrPrompt === 'string') {
-        const prompt = historyOrPrompt;
-        const systemInstruction = typeof newPartsOrSystem === 'string' ? newPartsOrSystem : "";
-        newParts = [
-            { text: systemInstruction ? `INSTRUCCIONES DEL SISTEMA:\n${systemInstruction}\n\n` : "" },
-            { text: prompt }
-        ];
-    } else {
-        history = historyOrPrompt;
-        newParts = newPartsOrSystem;
-    }
-
     const modelsToTry = [
-        "gemini-2.5-flash",        // ÚLTIMA GENERACIÓN (GA) - RECOMENDADO POR EL USUARIO
-        "gemini-1.5-flash",        // ULTRA-ESTABLE
-        "gemini-1.5-pro",          // POTENTE
-        "gemini-2.0-flash"         // ESTABLE
+        "gemini-2.5-flash",        // ÚLTIMA GENERACIÓN (GA)
+        "gemini-2.0-flash"         // ESTABLE Y RÁPIDO
     ];
 
     let lastError = "No response from any model";
 
     for (const model of modelsToTry) {
         try {
+            // Inyectamos la instrucción del sistema manualmente para compatibilidad con v1
+            const finalParts = [...newParts];
+            if (systemInstruction) {
+                if (history.length === 0) {
+                    finalParts.unshift({ text: `INSTRUCCIONES DEL SISTEMA:\n${systemInstruction}\n\n` });
+                } else {
+                    finalParts.unshift({ text: `RECORDATORIO DE IDENTIDAD: Eres Eddu-AI, Abogado Senior en COLOMBIA. Tu asesoría es EXCLUSIVA para Derecho Inmobiliario, Comercial y Firma Digital (Ley 527). Prohibido hablar de otros temas (ej: precio del dólar, política, clima). Responde diplomáticamente que tu experticia se limita al ámbito inmobiliario y digital de VECY.\n\n` });
+                }
+            }
+
+            const body = {
+                contents: [
+                    ...history,
+                    { role: 'user', parts: finalParts }
+                ],
+                generationConfig: {
+                    temperature: 0.75,
+                    maxOutputTokens: 8192,
+                }
+            };
+
+            // Eliminamos system_instruction y tools para máxima compatibilidad con v1
+            // La instrucción se inyecta manualmente en los parts si es necesario.
+
             const response = await fetch(
                 `https://generativelanguage.googleapis.com/v1/models/${model}:generateContent?key=${apiKey}`,
                 {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        contents: [
-                            ...history,
-                            { role: 'user', parts: newParts }
-                        ],
-                        generationConfig: {
-                            temperature: 0.75,
-                            maxOutputTokens: 8192,
-                        }
-                    })
+                    body: JSON.stringify(body)
                 }
             );
 
             if (!response.ok) {
                 const errText = await response.text();
-                console.warn(`Fallo con ${model}:`, errText);
+                console.error(`🔴 Fallo crítico con ${model}:`, {
+                    status: response.status,
+                    statusText: response.statusText,
+                    body: errText
+                });
                 try {
                     const parsedErr = JSON.parse(errText);
                     lastError = parsedErr.error?.message || errText;

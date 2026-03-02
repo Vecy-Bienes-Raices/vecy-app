@@ -98,7 +98,8 @@ export const detectGender = (name) => {
         'helena', 'elena', 'manuela', 'paula', 'mariana', 'ximena', 'lorena', 'marcela',
         'lina', 'angela', 'blanca', 'cecilia', 'nora', 'pilar', 'teresa', 'olga',
         'constanza', 'alejandra', 'estefania', 'vanessa', 'yolanda', 'claudia',
-        'silvia', 'liliana', 'tatiana', 'fernanda', 'michelle', 'stephanie', 'jennifer'
+        'silvia', 'liliana', 'tatiana', 'fernanda', 'michelle', 'stephanie', 'jennifer',
+        'jani', 'jania', 'janis'
     ];
 
     const maleNames = [
