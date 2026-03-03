@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Paperclip, Send, FileText, Image as ImageIcon, Plus, Mic, ChevronUp, Sparkles } from 'lucide-react';
+import { Paperclip, Send, FileText, Image as ImageIcon, Plus, Mic, Square, ChevronUp, Sparkles, Volume2 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { callGemini } from '../../utils/aiUtils';
 import { FormatText, TypewriterText, detectGender } from '../Layout/Shared';
@@ -18,6 +18,83 @@ const EdduAIChat = () => {
     const textareaRef = useRef(null);
     const fileInputRef = useRef(null);
     const [attachedFiles, setAttachedFiles] = useState([]);
+    const [isRecording, setIsRecording] = useState(false);
+    const mediaRecorderRef = useRef(null);
+    const audioChunksRef = useRef([]);
+    const [speakingId, setSpeakingId] = useState(null);
+
+    useEffect(() => {
+        return () => {
+            if (window.speechSynthesis) {
+                window.speechSynthesis.cancel();
+            }
+        };
+    }, []);
+
+    const toggleSpeak = (msgId, text) => {
+        if (!('speechSynthesis' in window)) {
+            alert("Tu navegador no soporta lectura de texto a voz.");
+            return;
+        }
+
+        if (speakingId === msgId) {
+            window.speechSynthesis.cancel();
+            setSpeakingId(null);
+        } else {
+            // Cancelar cualquier audio en proceso para forzar limpieza de memoria
+            window.speechSynthesis.cancel();
+
+            setTimeout(() => {
+                const cleanText = text.replace(/[*_#`]/g, '');
+                const utterance = new SpeechSynthesisUtterance(cleanText);
+
+                // Evitar Garbage Collection nativo que silencia el reproductor de la nada
+                window.currentUtterance = utterance;
+
+                utterance.lang = 'es-CO';
+                utterance.rate = 1.05;
+
+                utterance.onstart = () => {
+                    setSpeakingId(msgId);
+                };
+
+                const voices = window.speechSynthesis.getVoices();
+                if (voices.length > 0) {
+                    const voice = voices.find(v => v.lang === 'es-CO') ||
+                        voices.find(v => v.name.includes('Microsoft Sabina') || v.name.includes('Google español') || v.lang.startsWith('es'));
+                    if (voice) utterance.voice = voice;
+                }
+
+                // Workaround bug Chrome (se silencia a los 15 segundos)
+                const resumeEngine = setInterval(() => {
+                    if (window.speechSynthesis.speaking) {
+                        window.speechSynthesis.pause();
+                        window.speechSynthesis.resume();
+                    } else {
+                        clearInterval(resumeEngine);
+                    }
+                }, 10000);
+
+                utterance.onend = () => {
+                    clearInterval(resumeEngine);
+                    setSpeakingId(null);
+                };
+
+                utterance.onerror = (e) => {
+                    console.error("TTS Error:", e);
+                    clearInterval(resumeEngine);
+                    setSpeakingId(null);
+                };
+
+                window.speechSynthesis.speak(utterance);
+
+                // Forzar reproducción en caso de estado buggeado del navegador
+                if (window.speechSynthesis.paused) {
+                    window.speechSynthesis.resume();
+                }
+            }, 250);
+        }
+    };
 
     const handleFileAttach = (e) => {
         const files = Array.from(e.target.files);
@@ -69,14 +146,62 @@ const EdduAIChat = () => {
         }
     }, [input]);
 
+    const toggleRecording = async () => {
+        if (isRecording) {
+            mediaRecorderRef.current?.stop();
+            setIsRecording(false);
+        } else {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                const mediaRecorder = new MediaRecorder(stream);
+                mediaRecorderRef.current = mediaRecorder;
+                audioChunksRef.current = [];
+
+                mediaRecorder.ondataavailable = (event) => {
+                    if (event.data.size > 0) {
+                        audioChunksRef.current.push(event.data);
+                    }
+                };
+
+                mediaRecorder.onstop = () => {
+                    const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/webm' });
+                    const reader = new FileReader();
+                    reader.onload = (ev) => {
+                        const base64 = ev.target.result.split(',')[1];
+                        setAttachedFiles(prev => [...prev, {
+                            id: Date.now() + Math.random(),
+                            name: `Audio_${new Date().toLocaleTimeString().replace(/:/g, '')}.webm`,
+                            mimeType: 'audio/webm',
+                            base64,
+                            preview: null,
+                            isWord: false
+                        }]);
+                        track('chat_audio_recorded');
+                    };
+                    reader.readAsDataURL(audioBlob);
+                    stream.getTracks().forEach(track => track.stop());
+                };
+
+                mediaRecorder.start();
+                setIsRecording(true);
+            } catch (error) {
+                console.error("Error accediendo al micrófono:", error);
+                alert("No se pudo acceder al micrófono. Por favor verifica los permisos.");
+            }
+        }
+    };
+
     const handleSend = async () => {
         if ((!input.trim() && attachedFiles.length === 0) || isTyping) return;
 
         const userText = input.trim();
+        const hasAttachedAudio = attachedFiles.some(f => f.mimeType.startsWith('audio/'));
+        const displayDefaultMediaText = hasAttachedAudio ? 'Escuchando nota de voz...' : 'Analizando archivos adjuntos...';
+
         const userMsg = {
             id: Date.now(),
             type: 'user',
-            text: userText || (attachedFiles.length > 0 ? 'Analizando archivos adjuntos...' : ''),
+            text: userText || (attachedFiles.length > 0 ? displayDefaultMediaText : ''),
             files: [...attachedFiles]
         };
 
@@ -190,6 +315,12 @@ const EdduAIChat = () => {
             2. **TEMAS PROHIBIDOS:** Está terminantemente prohibido responder sobre: Precios de divisas (dólar, euro), política, medicina, deportes, clima o cualquier tema ajeno a lo inmobiliario.
             3. **RESPUESTA DIPLOMÁTICA:** Si te preguntan algo fuera de tu foco, responde: "**Estimado(a) [Nombre], mi propósito y experticia están blindados exclusivamente para el ámbito del Derecho Inmobiliario y la Firma Digital en Colombia. Para garantizar la excelencia, solo responderé inquietudes relacionadas con mi especialidad.**"
 
+            🔹 REDACCIÓN DE DOCUMENTOS Y UPSELL (CRÍTICO - REGLA DE VENTAS):
+            1. Tienes **ESTRICTAMENTE PROHIBIDO** redactar contratos completos, promesas de compraventa, cláusulas extensas, tutelas, demandas, correos elaborados o cualquier tipo de documento final. 
+            2. Eres un **Consultor Jurídico** (el cerebro), no un redactor (la mano de obra). 
+            3. Si el usuario te pide que redactes o crees un contrato, debes **negarte con extrema elegancia y amabilidad**, asesorarle sobre la ley que aplica, y **RECOMENDAR INMEDIATAMENTE** a tu colega premium: **El Redactor Jurídico Universal**.
+            4. Persuádelo diciendo algo como: *"Ala mi vecy, yo te doy toda la asesoría y te digo cómo es la ley, pero para redactar ese contrato con todas las de la ley y con la 'Cláusula de Validez de Firma Electrónica' obligatoria, necesitas a mi colega de equipo. Te recomiendo adquirir acceso a nuestra herramienta **[Redactor Jurídico Universal](/redactor-juridico)** en la página principal. ¡Es una inversión que se paga sola en tu primer cierre!"*
+
             🔹 PERSONALIDAD CACHACA Y TONO DE VOZ: 
             - Eres un verdadero cachaco moderno. Elegante, carismático y pedagógico.
             - **CRÍTICO:** Háblale siempre al usuario de "tú" (tuteo), NUNCA de "usted". Mantén un tono cercano, como de "tú a tú", combinando la confianza capitalina con un estricto profesionalismo jurídico.
@@ -203,6 +334,9 @@ const EdduAIChat = () => {
               * **"Fregar"**: Molestar ("No dejes que te frieguen con avisos físicos").
               * **"Guache"**: Alguien grosero o de malos modos (quizás una contraparte rebelde).
               * **"Veci / Vecy / Vecinito"**: Tu palabra mágica. Es el lubricante social de Bogotá y el origen de nuestra marca VECY. Eres la evolución del antiguo "Sumercé", trasladando el afecto, la amabilidad y la confianza del barrio antiguo a un entorno legal hiper-tecnológico (SEO, Firma Electrónica IA).
+
+            🔹 CAPACIDADES TÉCNICAS (MUY IMPORTANTE):
+            - **TIENES CAPACIDAD NATIVA DE ESCUCHAR AUDIO.** Si recibes un archivo de audio o una nota de voz, escúchala, procésala y responde en base a su contenido hablado. NUNCA digas que no puedes escuchar, procesar voz o que eres una IA de solo texto.
             
             🔹 REGLA DE ORO: CONCISIÓN Y CLARIDAD.
             1. **Explica fácil:** Transforma la jerga legal en conceptos sencillos.
@@ -236,7 +370,10 @@ const EdduAIChat = () => {
             const fileNames = attachedFiles.map(f => f.name).join(', ');
             const newParts = [];
 
-            newParts.push({ text: attachedFiles.length > 0 ? `[Archivos adjuntos: ${fileNames}]\n${userText || 'Analiza estos documentos.'}` : userText });
+            const hasAudio = attachedFiles.some(f => f.mimeType.startsWith('audio/'));
+            const defaultText = hasAudio ? 'Por favor escucha esta nota de voz y respóndeme.' : 'Analiza estos documentos.';
+
+            newParts.push({ text: attachedFiles.length > 0 ? `[Archivos/Audios adjuntos: ${fileNames}]\n${userText || defaultText}` : userText });
 
             attachedFiles.filter(f => !f.isWord).forEach(file => {
                 newParts.push({ inlineData: { mimeType: file.mimeType, data: file.base64 } });
@@ -365,12 +502,30 @@ const EdduAIChat = () => {
                                                 <div key={fIdx} className="flex items-center gap-2 bg-black/40 px-3 py-2 rounded-lg border border-[#d4af37]/30 text-[11px] text-[#d4af37]">
                                                     {file.mimeType?.startsWith('image/') ? (
                                                         <ImageIcon className="w-4 h-4" />
+                                                    ) : file.mimeType?.startsWith('audio/') ? (
+                                                        <Mic className="w-4 h-4" />
                                                     ) : (
                                                         <FileText className="w-4 h-4" />
                                                     )}
                                                     <span className="truncate max-w-[120px]">{file.name}</span>
                                                 </div>
                                             ))}
+                                        </div>
+                                    )}
+
+                                    {msg.type === 'bot' && (
+                                        <div className="mt-3 flex justify-end border-t border-[#bf953f]/10 pt-2">
+                                            <button
+                                                onClick={() => toggleSpeak(msg.id, msg.text)}
+                                                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[11px] font-medium transition-colors ${speakingId === msg.id
+                                                    ? 'bg-[#d4af37]/20 text-[#d4af37]'
+                                                    : 'bg-black/20 text-gray-400 hover:text-gray-200 hover:bg-black/40'
+                                                    }`}
+                                                title={speakingId === msg.id ? "Detener audio" : "Escuchar respuesta"}
+                                            >
+                                                <Volume2 className={`w-3.5 h-3.5 ${speakingId === msg.id ? 'animate-pulse' : ''}`} />
+                                                {speakingId === msg.id ? 'Detener' : 'Escuchar'}
+                                            </button>
                                         </div>
                                     )}
                                 </div>
@@ -400,7 +555,7 @@ const EdduAIChat = () => {
                             {attachedFiles.map(file => (
                                 <div key={file.id} className="relative flex items-center gap-2 bg-[#1c1c1c] border border-[#d4af37]/30 px-2 py-1.5 rounded-md text-[10px] text-gray-300">
                                     <div className="w-3 h-3 text-[#d4af37]">
-                                        {file.mimeType?.startsWith('image/') ? <ImageIcon className="w-3 h-3" /> : <FileText className="w-3 h-3" />}
+                                        {file.mimeType?.startsWith('image/') ? <ImageIcon className="w-3 h-3" /> : file.mimeType?.startsWith('audio/') ? <Mic className="w-3 h-3" /> : <FileText className="w-3 h-3" />}
                                     </div>
                                     <span className="max-w-[80px] truncate">{file.name}</span>
                                     <button onClick={() => removeAttachedFile(file.id)} className="ml-1 text-gray-500 hover:text-red-400">×</button>
@@ -446,8 +601,12 @@ const EdduAIChat = () => {
                         </div>
 
                         <div className="flex items-center gap-1">
-                            <button className="p-2 text-gray-500 hover:text-gray-300 transition-colors mr-1">
-                                <Mic className="w-5 h-5" />
+                            <button
+                                onClick={toggleRecording}
+                                className={`p-2 transition-colors mr-1 rounded-full ${isRecording ? 'text-red-500 bg-red-500/10 animate-pulse' : 'text-gray-500 hover:text-gray-300'}`}
+                                title={isRecording ? "Detener grabación" : "Grabar audio"}
+                            >
+                                {isRecording ? <Square className="w-5 h-5 fill-current" /> : <Mic className="w-5 h-5" />}
                             </button>
                             <button
                                 onClick={handleSend}

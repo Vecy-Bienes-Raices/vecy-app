@@ -1,9 +1,19 @@
 import React from 'react';
 import { Award, Printer, Download, ArrowLeft, ShieldCheck, CheckCircle } from 'lucide-react';
 import { PageTransition } from '../Layout/Shared';
+import { usePayment } from '../../context/PaymentContext';
+import { useNavigate } from 'react-router-dom';
 
 const CertificateView = ({ userData, score, onBack }) => {
+    const { hasAccessToCertificate } = usePayment();
+    const navigate = useNavigate();
+
     const handlePrint = () => {
+        if (!hasAccessToCertificate) {
+            alert("Para imprimir o descargar tu Certificado Oficial requieres una Suscripción Premium Anual (Abogado o Redactor).");
+            navigate('/#planes');
+            return;
+        }
         window.print();
     };
 
@@ -103,9 +113,16 @@ const CertificateView = ({ userData, score, onBack }) => {
                     </button>
                     <button
                         onClick={handlePrint}
-                        className="btn-gold-premium w-full sm:w-auto flex items-center justify-center gap-3 !px-12 !py-5 !text-sm !font-black shadow-[0_0_30px_rgba(191,149,63,0.3)] animate-pulse"
+                        className={`w-full sm:w-auto flex items-center justify-center gap-3 !px-12 !py-5 !text-sm !font-black transition-all ${hasAccessToCertificate
+                            ? "btn-gold-premium shadow-[0_0_30px_rgba(191,149,63,0.3)] animate-pulse"
+                            : "bg-[#111] border border-[#bf953f]/50 text-gray-400 hover:text-[#d4af37]"
+                            }`}
                     >
-                        <Printer className="w-5 h-5" /> Imprimir Diploma de Élite
+                        {hasAccessToCertificate ? (
+                            <><Printer className="w-5 h-5" /> Imprimir Diploma de Élite</>
+                        ) : (
+                            <><ShieldCheck className="w-5 h-5" /> Desbloquear Diploma (Plan Anual)</>
+                        )}
                     </button>
                 </div>
 

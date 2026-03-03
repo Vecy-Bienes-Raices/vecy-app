@@ -1,14 +1,19 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { BookOpen, GraduationCap, ChevronRight, Trophy, ClipboardCheck, CheckCircle, ArrowLeft, ArrowRight } from 'lucide-react';
+import { BookOpen, GraduationCap, ChevronRight, Trophy, ClipboardCheck, CheckCircle, ArrowLeft, ArrowRight, Lock } from 'lucide-react';
 import { PageTransition } from '../Layout/Shared';
 import { academyModules } from './ModuleRegistry';
 import ModuleDetailView from './ModuleDetailView';
 import QuizView from './QuizView';
+import AcademyFloatingWidget from './AcademyFloatingWidget';
+import { usePayment } from '../../context/PaymentContext';
+import { useAuth } from '../../context/AuthContext';
 import { track } from '@vercel/analytics';
 
 const CourseView = () => {
     const navigate = useNavigate();
+    const { user } = useAuth();
+    const { hasAccessToCourse } = usePayment();
     const [activeModuleId, setActiveModuleId] = useState(null);
     const [showQuiz, setShowQuiz] = useState(false);
     const [hasCompletedModules, setHasCompletedModules] = useState(false);
@@ -36,14 +41,17 @@ const CourseView = () => {
         return <QuizView onBack={() => setShowQuiz(false)} />;
     }
 
-    if (activeModuleId && activeModule) {
+    if (activeModuleId && activeModule && hasAccessToCourse) {
         return (
-            <ModuleDetailView
-                module={activeModule}
-                onBack={() => setActiveModuleId(null)}
-                onNext={handleNext}
-                onPrevious={activeModuleId !== academyModules[0].id ? handlePrevious : null}
-            />
+            <>
+                <ModuleDetailView
+                    module={activeModule}
+                    onBack={() => setActiveModuleId(null)}
+                    onNext={handleNext}
+                    onPrevious={activeModuleId !== academyModules[0].id ? handlePrevious : null}
+                />
+                <AcademyFloatingWidget activeModule={activeModule} />
+            </>
         );
     }
 
@@ -60,12 +68,21 @@ const CourseView = () => {
                     </p>
                 </div>
 
+                {/* Modules Grid (Always Visible, Locked if no access) */}
                 {!hasCompletedModules ? (
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                         {academyModules.map((module, index) => (
                             <button
                                 key={module.id}
                                 onClick={() => {
+                                    if (!user) {
+                                        navigate('/login');
+                                        return;
+                                    }
+                                    if (!hasAccessToCourse) {
+                                        navigate('/#planes');
+                                        return;
+                                    }
                                     setActiveModuleId(module.id);
                                     track('course_module_start', {
                                         module_id: module.id,
@@ -97,7 +114,11 @@ const CourseView = () => {
                                     </p>
 
                                     <div className="flex items-center gap-2 text-[#bf953f] font-bold text-xs uppercase tracking-widest group-hover:gap-4 transition-all">
-                                        Comenzar Lectura <ChevronRight className="w-4 h-4" />
+                                        {hasAccessToCourse ? (
+                                            <>Comenzar Lectura <ChevronRight className="w-4 h-4" /></>
+                                        ) : (
+                                            <><Lock className="w-4 h-4 text-gray-400" /> <span className="text-gray-400">Desbloquear Nivel</span></>
+                                        )}
                                     </div>
                                 </div>
                             </button>
@@ -155,6 +176,9 @@ const CourseView = () => {
                     </PageTransition>
                 )}
             </div>
+
+            {/* Global Socratic Ai Tutor Widget */}
+            <AcademyFloatingWidget activeModule={activeModule} />
         </PageTransition>
     );
 };

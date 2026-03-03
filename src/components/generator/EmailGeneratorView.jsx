@@ -1,19 +1,34 @@
 import React, { useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import {
-    ArrowLeft, Gavel, FileText, Copy, Loader, Scale
+    ArrowLeft, Gavel, FileText, Copy, Loader, Scale, ShieldAlert, Check
 } from 'lucide-react';
 import { callGemini } from '../../utils/aiUtils';
 import { PageTransition, FormatText } from '../Layout/Shared';
 import { track } from '@vercel/analytics';
+import { usePayment } from '../../context/PaymentContext';
+import { useAuth } from '../../context/AuthContext';
+import { useNavigate } from 'react-router-dom';
+import { openEpaycoCheckout } from '../../lib/epayco';
 
 const EmailGeneratorView = () => {
+    const { hasPaidGenerator, processPaymentSuccess } = usePayment();
+    const { user } = useAuth();
+    const navigate = useNavigate();
     const [topic, setTopic] = useState('');
     const [customTopic, setCustomTopic] = useState('');
     const [details, setDetails] = useState('');
     const [generatedEmail, setGeneratedEmail] = useState('');
     const [loading, setLoading] = useState(false);
     const previewRef = useRef(null);
+
+    const handleCheckout = (plan) => {
+        if (!user) {
+            navigate('/login');
+        } else {
+            openEpaycoCheckout(user, plan);
+        }
+    };
 
     const handleGenerate = async () => {
         if (!topic) return;
@@ -63,6 +78,88 @@ const EmailGeneratorView = () => {
             topic: topic === 'otro' ? customTopic : topic
         });
     };
+
+    if (!hasPaidGenerator) {
+        return (
+            <PageTransition>
+                <div className="min-h-screen pt-32 pb-20 px-6 max-w-7xl mx-auto flex flex-col items-center justify-center">
+                    <div className="text-center max-w-3xl mb-16">
+                        <div className="inline-flex items-center justify-center p-4 bg-gradient-to-r from-[#111] to-[#1c1c1c] rounded-full border border-[#bf953f]/40 mb-8 shadow-[0_0_30px_rgba(191,149,63,0.2)]">
+                            <Scale className="w-8 h-8 text-[#bf953f]" />
+                        </div>
+                        <h1 className="text-4xl md:text-5xl font-serif font-bold text-white mb-6">Redactor Jurídico Universal</h1>
+                        <p className="text-lg text-gray-400 font-light leading-relaxed">
+                            Genera promesas de compraventa, contratos de corretaje y requerimientos legales impecables, adaptados a la Ley Colombiana en segundos.
+                        </p>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl w-full">
+                        {/* Plan Mensual */}
+                        <div className="bg-[#0e0e0e] border border-[#333] hover:border-[#bf953f]/50 p-8 rounded-2xl relative overflow-hidden transition-all group">
+                            <h3 className="text-2xl font-serif font-bold text-white mb-2">Mensual</h3>
+                            <p className="text-sm text-gray-500 mb-6 font-medium">Flexibilidad mes a mes</p>
+                            <div className="mb-8">
+                                <span className="text-4xl font-bold text-white group-hover:text-[#bf953f] transition-colors">$119.997</span>
+                                <span className="text-gray-500 text-sm"> /mes COP</span>
+                            </div>
+
+                            <ul className="space-y-4 mb-10 border-t border-[#333] pt-6">
+                                {[
+                                    'Generación de Documentos sin límite',
+                                    'Contratos, Promesas, Requerimientos',
+                                    'Cláusula Validez de Firma Electrónica (Ley 527) Incluida',
+                                    'Formatos Validados por Abogados',
+                                    'ACCESO GRATUITO AL CURSO MÁSTER'
+                                ].map((feature, idx) => (
+                                    <li key={idx} className="flex items-start text-gray-300 text-sm">
+                                        <Check className="w-5 h-5 text-[#10b981] mr-3 shrink-0" />
+                                        <span dangerouslySetInnerHTML={{ __html: feature.replace("ACCESO GRATUITO AL CURSO MÁSTER", "<strong class='text-[#bf953f]'>ACCESO GRATUITO AL CURSO MÁSTER</strong>") }} />
+                                    </li>
+                                ))}
+                            </ul>
+
+                            <button onClick={() => handleCheckout('redactor_mensual')} className="w-full py-4 border border-[#333] hover:border-[#bf953f] rounded-xl text-white font-bold uppercase tracking-widest text-sm transition-all hover:bg-white/5">
+                                {user ? 'Seleccionar Mensual' : 'Inicia Sesión para Comprar'}
+                            </button>
+                        </div>
+
+                        {/* Plan Anual - Destacado */}
+                        <div className="bg-gradient-to-br from-[#1c1c1c] via-[#111] to-[#000] border border-[#d4af37]/50 p-8 rounded-2xl relative overflow-hidden transition-all shadow-[0_0_40px_rgba(212,175,55,0.15)] group transform md:-translate-y-4">
+                            <div className="absolute top-0 right-0 bg-[#d4af37] text-black text-[10px] font-bold uppercase tracking-[0.2em] px-4 py-1 rounded-bl-xl">
+                                2 Meses Gratis
+                            </div>
+
+                            <h3 className="text-2xl font-serif font-bold text-[#d4af37] mb-2">Anual Pro</h3>
+                            <p className="text-sm text-gray-400 mb-6 font-medium">Mayor ahorro para agentes serios</p>
+                            <div className="mb-8">
+                                <span className="text-5xl font-bold text-white">$1.199.970</span>
+                                <span className="text-gray-500 text-sm"> /año COP</span>
+                            </div>
+
+                            <ul className="space-y-4 mb-10 border-t border-[#d4af37]/20 pt-6">
+                                {[
+                                    'Generación de Documentos Ilimitada',
+                                    'Prioridad en Nuevas Plantillas Legales',
+                                    'Auditoría Constante de Leyes Aplicadas',
+                                    'Soporte Técnico Prioritario',
+                                    'ACCESO GRATUITO AL CURSO MÁSTER (Acceso Vitalicio)'
+                                ].map((feature, idx) => (
+                                    <li key={idx} className="flex items-start text-gray-300 text-sm">
+                                        <Check className="w-5 h-5 text-[#d4af37] mr-3 shrink-0" />
+                                        <span dangerouslySetInnerHTML={{ __html: feature.replace("ACCESO GRATUITO AL CURSO MÁSTER (Acceso Vitalicio)", "<strong class='text-[#d4af37]'>ACCESO GRATUITO AL CURSO MÁSTER</strong>") }} />
+                                    </li>
+                                ))}
+                            </ul>
+
+                            <button onClick={() => handleCheckout('redactor_anual')} className="w-full btn-gold-premium !rounded-xl !py-4 text-sm">
+                                {user ? 'Iniciar Plan Anual' : 'Inicia Sesión para Comprar'}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </PageTransition>
+        );
+    }
 
     return (
         <PageTransition>

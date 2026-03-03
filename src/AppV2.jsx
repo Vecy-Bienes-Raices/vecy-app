@@ -10,12 +10,21 @@ import CourseView from './components/academy/CourseView';
 import EmailGeneratorView from './components/generator/EmailGeneratorView';
 import SupportView from './pages/SupportView';
 import { LegalView, DataPolicyView } from './pages/StaticViews';
-import FloatingAiWidget from './components/Layout/FloatingAiWidget';
+import AuthView from './pages/AuthView';
+import { useAuth } from './context/AuthContext';
+import { usePayment } from './context/PaymentContext';
 
 const AppV2 = () => {
     const [scrolled, setScrolled] = useState(false);
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const location = useLocation();
+    const { user, signOut } = useAuth();
+    const { logout: paymentLogout } = usePayment();
+
+    const handleLogout = async () => {
+        await signOut();
+        paymentLogout();
+    };
 
     useEffect(() => {
         const handleScroll = () => setScrolled(window.scrollY > 50);
@@ -56,11 +65,18 @@ const AppV2 = () => {
                             </div>
                         </Link>
                         <div className="hidden md:block">
-                            <div className="ml-10 flex items-baseline space-x-8">
-                                <Link to="/academia" className="text-gray-400 hover:text-white transition-colors duration-300 text-xs font-semibold uppercase tracking-[0.15em] py-2 border-b-2 border-transparent hover:border-[#bf953f]">Academia VECY</Link>
-                                <a href="/#mito" className="text-gray-400 hover:text-white transition-colors duration-300 text-xs font-semibold uppercase tracking-[0.15em] py-2 border-b-2 border-transparent hover:border-[#bf953f]">Riesgos WhatsApp</a>
-                                <a href="/#ley" className="text-gray-400 hover:text-white transition-colors duration-300 text-xs font-semibold uppercase tracking-[0.15em] py-2 border-b-2 border-transparent hover:border-[#bf953f]">Marco Legal</a>
-                                <a href="/#herramientas" className="text-gray-400 hover:text-white transition-colors duration-300 text-xs font-semibold uppercase tracking-[0.15em] py-2 border-b-2 border-transparent hover:border-[#bf953f]">Herramientas</a>
+                            <div className="ml-10 flex items-center space-x-8">
+                                <Link to="/" className="text-gray-400 hover:text-white transition-colors duration-300 text-xs font-semibold uppercase tracking-[0.15em] py-2 border-b-2 border-transparent hover:border-[#bf953f]">Presentación</Link>
+                                <a href="/#curso" className="text-gray-400 hover:text-white transition-colors duration-300 text-xs font-semibold uppercase tracking-[0.15em] py-2 border-b-2 border-transparent hover:border-[#bf953f]">El Curso</a>
+                                <a href="/#planes" className="text-gray-400 hover:text-white transition-colors duration-300 text-xs font-semibold uppercase tracking-[0.15em] py-2 border-b-2 border-transparent hover:border-[#bf953f]">Herramientas IA</a>
+                                {user ? (
+                                    <>
+                                        <Link to="/academia" className="text-[#bf953f] hover:text-[#0a0a0a] hover:bg-[#bf953f] transition-all duration-300 text-xs font-bold uppercase tracking-[0.15em] py-2 px-4 border border-[#bf953f] rounded-sm shadow-[0_0_10px_rgba(212,175,55,0.2)] hover:shadow-[0_0_20px_rgba(212,175,55,0.6)]">Mi Academia</Link>
+                                        <button onClick={handleLogout} className="text-red-400 hover:text-red-300 transition-colors duration-300 text-xs font-semibold uppercase tracking-[0.15em] py-2">Cerrar Sesión</button>
+                                    </>
+                                ) : (
+                                    <Link to="/login" className="text-[#bf953f] hover:text-[#0a0a0a] hover:bg-[#bf953f] transition-all duration-300 text-xs font-bold uppercase tracking-[0.15em] py-2 px-4 border border-[#bf953f] rounded-sm shadow-[0_0_10px_rgba(212,175,55,0.2)] hover:shadow-[0_0_20px_rgba(212,175,55,0.6)]">Iniciar Sesión</Link>
+                                )}
                             </div>
                         </div>
 
@@ -73,12 +89,19 @@ const AppV2 = () => {
                 </div>
 
                 {mobileMenuOpen && (
-                    <div className="md:hidden absolute top-24 left-0 w-full bg-[#0a0a0a]/95 backdrop-blur-xl border-b border-[#bf953f]/30 animate-fade-in z-40">
+                    <div className="md:hidden absolute top-24 left-0 w-full bg-[#0a0a0a]/95 backdrop-blur-xl border-b border-[#bf953f]/30 animate-fade-in z-40 shadow-2xl">
                         <div className="px-6 py-8 space-y-4">
-                            <Link to="/academia" className="text-white block px-4 py-3 rounded-sm border-l-2 border-[#bf953f] bg-white/5 font-serif text-lg tracking-wide" onClick={() => setMobileMenuOpen(false)}>Academia VECY</Link>
-                            <a href="/#mito" className="text-gray-300 hover:text-white block px-4 py-3 text-base" onClick={() => setMobileMenuOpen(false)}>Riesgos WhatsApp</a>
-                            <a href="/#ley" className="text-gray-300 hover:text-white block px-4 py-3 text-base" onClick={() => setMobileMenuOpen(false)}>Marco Legal</a>
-                            <a href="/#herramientas" className="text-gray-300 hover:text-white block px-4 py-3 text-base" onClick={() => setMobileMenuOpen(false)}>Herramientas</a>
+                            <Link to="/" className="text-gray-300 hover:text-white block px-4 py-3 text-base border-b border-[#222]" onClick={() => setMobileMenuOpen(false)}>Presentación</Link>
+                            <a href="/#curso" className="text-gray-300 hover:text-white block px-4 py-3 text-base border-b border-[#222]" onClick={() => setMobileMenuOpen(false)}>El Curso</a>
+                            <a href="/#planes" className="text-gray-300 hover:text-white block px-4 py-3 text-base border-b border-[#222]" onClick={() => setMobileMenuOpen(false)}>Herramientas IA</a>
+                            {user ? (
+                                <>
+                                    <Link to="/academia" className="text-black block px-4 py-3 mt-4 rounded-sm bg-gradient-to-r from-[#bf953f] to-[#fcf6ba] font-bold text-center tracking-wider uppercase shadow-[0_0_15px_rgba(212,175,55,0.4)]" onClick={() => setMobileMenuOpen(false)}>Mi Academia</Link>
+                                    <button onClick={() => { handleLogout(); setMobileMenuOpen(false); }} className="text-red-400 w-full text-left block px-4 py-3 font-bold uppercase tracking-wider text-sm mt-2">Cerrar Sesión</button>
+                                </>
+                            ) : (
+                                <Link to="/login" className="text-black block px-4 py-3 mt-4 rounded-sm bg-gradient-to-r from-[#bf953f] to-[#fcf6ba] font-bold text-center tracking-wider uppercase shadow-[0_0_15px_rgba(212,175,55,0.4)]" onClick={() => setMobileMenuOpen(false)}>Iniciar Sesión</Link>
+                            )}
                         </div>
                     </div>
                 )}
@@ -92,12 +115,9 @@ const AppV2 = () => {
                     <Route path="/abogado-eddu-ai" element={<SupportView />} />
                     <Route path="/legal" element={<LegalView />} />
                     <Route path="/datos" element={<DataPolicyView />} />
+                    <Route path="/login" element={<AuthView />} />
                 </Routes>
             </AnimatePresence>
-
-            <div className="print:hidden">
-                <FloatingAiWidget />
-            </div>
 
             <footer className="py-12 bg-black border-t border-[#222] text-center">
                 <div className="max-w-4xl mx-auto px-6">

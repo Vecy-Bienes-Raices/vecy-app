@@ -44,7 +44,12 @@ export const callGemini = async (history = [], newParts = [], systemInstruction 
                 if (history.length === 0) {
                     finalParts.unshift({ text: `INSTRUCCIONES DEL SISTEMA:\n${systemInstruction}\n\n` });
                 } else {
-                    finalParts.unshift({ text: `RECORDATORIO DE IDENTIDAD: Eres Eddu-AI, Abogado Senior en COLOMBIA. Tu asesoría es EXCLUSIVA para Derecho Inmobiliario, Comercial y Firma Digital (Ley 527). Prohibido hablar de otros temas (ej: precio del dólar, política, clima). Responde diplomáticamente que tu experticia se limita al ámbito inmobiliario y digital de VECY.\n\n` });
+                    const isMaestro = systemInstruction.includes("MAESTRO EDDU");
+                    if (isMaestro) {
+                        finalParts.unshift({ text: `RECORDATORIO DE IDENTIDAD: Eres el Maestro Eddu, tutor socrático de VECY Academia. Mantén tu personalidad cachaca y enfócate en el aprendizaje del agente inmobiliario.\n\n` });
+                    } else {
+                        finalParts.unshift({ text: `RECORDATORIO DE IDENTIDAD: Eres Eddu-AI, Abogado Senior en COLOMBIA. Tu asesoría es EXCLUSIVA para Derecho Inmobiliario, Comercial y Firma Digital (Ley 527). Prohibido hablar de otros temas.\n\n` });
+                    }
                 }
             }
 
