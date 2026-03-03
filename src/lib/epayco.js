@@ -40,6 +40,10 @@ export const openEpaycoCheckout = (user, plan) => {
         lang: "es",
         external: "false", // Modal interno
         
+        // Forzar el logo cuadrado dentro del marco circular de ePayco
+        method: "GET",    
+        image: "https://vecy.co/vecy_logo_square.png",
+        
         // Metadata extra para que en el webhook del backend (Supabase) sepamos a quién activar
         extra1: user?.id || "anon", 
         extra2: plan, 
